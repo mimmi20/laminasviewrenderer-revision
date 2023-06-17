@@ -14,6 +14,7 @@ namespace Mimmi20\LaminasView\Revision;
 
 use JsonException;
 use org\bovigo\vfs\vfsStream;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -76,11 +77,8 @@ final class MinifyTest extends TestCase
         return $minify;
     }
 
-    /**
-     * @throws Exception
-     *
-     * @depends testConstructOk
-     */
+    /** @throws Exception */
+    #[Depends('testConstructOk')]
     public function testGetPackageFilesWithoutMerging(Minify $minify): void
     {
         $files = $minify->getPackageFiles('detect-js');

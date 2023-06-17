@@ -17,6 +17,7 @@ use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Helper\Doctype;
 use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
+use PHPUnit\Framework\Attributes\Depends;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
@@ -981,11 +982,8 @@ final class RevisionHeadLinkTest extends TestCase
         );
     }
 
-    /**
-     * @throws Exception
-     *
-     * @depends testAppendPackage
-     */
+    /** @throws Exception */
+    #[Depends('testAppendPackage')]
     public function testToStringWithoutIndent(RevisionHeadLink $object): void
     {
         self::assertSame(
@@ -994,11 +992,8 @@ final class RevisionHeadLinkTest extends TestCase
         );
     }
 
-    /**
-     * @throws Exception
-     *
-     * @depends testAppendPackage
-     */
+    /** @throws Exception */
+    #[Depends('testAppendPackage')]
     public function testToStringWithIndent(RevisionHeadLink $object): void
     {
         self::assertSame(

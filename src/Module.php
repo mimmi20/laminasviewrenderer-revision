@@ -14,11 +14,6 @@ namespace Mimmi20\LaminasView\Revision;
 
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
 
-/**
- * Modul-Handler des Revision-Moduls
- *
- * @codeCoverageIgnore
- */
 final class Module implements ConfigProviderInterface
 {
     /**
