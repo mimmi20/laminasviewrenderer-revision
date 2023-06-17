@@ -19,157 +19,168 @@ jobs:
 
     uses: "mimmi20/mimmi20/.github/workflows/ci.yml@main"
     with:
-      extensions: "ctype, dom, iconv, mbstring, simplexml, tokenizer, xml, xmlwriter"
+      extensions: "ctype, curl, json, opcache, dom, mbstring, iconv, intl, simplexml, tokenizer, xml, xmlwriter"
       ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0"
       composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
       composer-outdated-option: ""
-      skip-phpstan: true
-      skip-phplint: true
-      skip-rector: true
-      skip-phpmd: true
+      skip-phpstan: false
+      skip-phplint: false
+      skip-rector: false
+      skip-phpmd: false
       skip-psalm: true
     secrets:
       envPAT: "${{ secrets.GITHUB_TOKEN }}"
 
-#  tests:
-#    name: "UnitTests with PHPUnit"
-#
-#    needs: "ci"
-#
-#    runs-on: "${{ matrix.operating-system }}"
-#    timeout-minutes: 10
-#    continue-on-error: false
-#
-#    strategy:
-#      fail-fast: false
-#
-#      matrix:
-#        operating-system:
-#          - "ubuntu-20.04"
-#          - "ubuntu-22.04"
-#
-#        php-version: ${{ fromJson(needs.ci.outputs.version) }}
-#
-#        dependencies:
-#          - "highest"
-#          - "lowest"
-#
-#    steps:
-#      - name: "Checkout"
-#        uses: "actions/checkout@v3"
-#        with:
-#          # Disabling shallow clone is recommended for improving relevancy of reporting
-#          fetch-depth: 0
-#          lfs: false
-#          persist-credentials: false
-#
-#      - name: "Install PHP"
-#        uses: "shivammathur/setup-php@2.23.0"
-#        with:
-#          php-version: "${{ matrix.php-version }}"
-#          extensions: "none, phar, json, opcache, ${{ join(fromJson(needs.ci.outputs.extensions), ', ') }}"
-#          ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0"
-#          coverage: "none"
-#          tools: "composer:v2"
-#        env:
-#          fail-fast: true
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          phpts: "ts"
-#
-#      - name: "Update dependencies with composer"
-#        uses: "ramsey/composer-install@v2"
-#        with:
-#          dependency-versions: "${{ matrix.dependencies }}"
-#          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
-#
-#      - name: "Run unit tests with phpunit/phpunit"
-#        run: "vendor/bin/phpunit -c phpunit.xml --no-coverage"
-#
-#  code-coverage:
-#    name: "Code Coverage with PHPUnit"
-#
-#    needs:
-#      - "ci"
-#      - "tests"
-#
-#    runs-on: "${{ matrix.operating-system }}"
-#    timeout-minutes: 10
-#    continue-on-error: false
-#
-#    strategy:
-#      fail-fast: false
-#
-#      matrix:
-#        operating-system:
-#          - "ubuntu-20.04"
-#          - "ubuntu-22.04"
-#
-#        php-version: ${{ fromJson(needs.ci.outputs.version) }}
-#
-#        dependencies:
-#          - "highest"
-#          - "lowest"
-#
-#    steps:
-#      - name: "Checkout"
-#        uses: "actions/checkout@v3"
-#        with:
-#          # Disabling shallow clone is recommended for improving relevancy of reporting
-#          fetch-depth: 0
-#          lfs: false
-#          persist-credentials: false
-#
-#      - name: "Install PHP"
-#        uses: "shivammathur/setup-php@2.23.0"
-#        with:
-#          php-version: "${{ matrix.php-version }}"
-#          extensions: "none, phar, json, opcache, ${{ join(fromJson(needs.ci.outputs.extensions), ', ') }}, ctype, intl, curl"
-#          ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0, xdebug.mode=coverage"
-#          coverage: "xdebug"
-#          tools: "composer:v2"
-#        env:
-#          fail-fast: true
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          phpts: "ts"
-#
-#      - name: "Update dependencies with composer"
-#        uses: "ramsey/composer-install@v2"
-#        with:
-#          dependency-versions: "${{ matrix.dependencies }}"
-#          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
-#
-#      - name: "Create cache directory for phpunit/phpunit"
-#        run: "mkdir -p .build/coverage"
-#
-#      - name: "Collect code coverage with Xdebug and phpunit/phpunit"
-#        run: "vendor/bin/phpunit -c phpunit.xml --coverage-clover=.build/coverage/clover.xml --coverage-text --coverage-xml=.build/coverage/coverage-xml --log-junit=.build/coverage/phpunit.junit.xml"
-#
-#      - name: "Upload coverage to Codecov"
-#        uses: "codecov/codecov-action@v3.1.1"
-#        with:
-#          file: ".build/coverage/clover.xml"
-#          flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }}"
-#          verbose: false
-#
-#      - name: "Run mutation tests with infection/infection"
-#        env:
-#          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-#        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=84 --min-msi=84 --coverage=.build/coverage --logger-github --no-progress -vv"
-#
-#  # This is a meta job to avoid to have to constantly change the protection rules
-#  # whenever we touch the matrix.
-#  tests-status:
-#    name: "Unit & Integration Tests Status"
-#    runs-on: "ubuntu-22.04"
-#    needs:
-#      - "tests"
-#      - "code-coverage"
-#    if: always()
-#    steps:
-#      - name: Successful run
-#        if: ${{ !(contains(needs.*.result, 'failure')) }}
-#        run: exit 0
-#
-#      - name: Failing run
-#        if: ${{ contains(needs.*.result, 'failure') }}
-#        run: exit 1
+  tests:
+    name: "UnitTests with PHPUnit"
+
+    needs: "ci"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-20.04"
+          - "ubuntu-22.04"
+
+        php-version:
+          - "8.1"
+          - "8.2"
+
+        dependencies:
+          - "highest"
+          - "lowest"
+
+        ts:
+          - "ts"
+          - "nts"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.25.2"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "json, opcache, dom, mbstring, intl, simplexml, tokenizer, xml, xmlwriter, curl"
+          ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0"
+          coverage: "none"
+          tools: "composer:v2"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          phpts: "${{ matrix.ts }}"
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@2.2.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+
+      - name: "Run unit tests with phpunit/phpunit"
+        run: "vendor/bin/phpunit -c phpunit.xml --no-coverage"
+
+  code-coverage:
+    name: "Code Coverage with PHPUnit"
+
+    needs: "tests"
+
+    runs-on: "${{ matrix.operating-system }}"
+    timeout-minutes: 10
+    continue-on-error: false
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        operating-system:
+          - "ubuntu-20.04"
+          - "ubuntu-22.04"
+
+        php-version:
+          - "8.1"
+          - "8.2"
+
+        dependencies:
+          - "highest"
+          - "lowest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+        with:
+          # Disabling shallow clone is recommended for improving relevancy of reporting
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.25.2"
+        with:
+          php-version: "${{ matrix.php-version }}"
+          extensions: "json, opcache, dom, mbstring, intl, simplexml, tokenizer, xml, xmlwriter, curl"
+          ini-values: "opcache.enable=1, opcache.fast_shutdown=0, zend.assertions=1, assert.exception=On, intl.default_locale=de, intl.use_exceptions=1, zend.exception_ignore_args=0, xdebug.mode=coverage"
+          coverage: "xdebug"
+          tools: "composer:v2"
+        env:
+          fail-fast: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          phpts: "ts"
+
+      - name: "Update dependencies with composer"
+        uses: "ramsey/composer-install@2.2.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+          composer-options: "--optimize-autoloader --prefer-dist --prefer-stable -v"
+
+      - name: "Create cache directory for phpunit/phpunit"
+        run: "mkdir -p .build/coverage"
+
+      - name: "Collect code coverage with Xdebug and phpunit/phpunit"
+        run: "vendor/bin/phpunit -c phpunit.xml --coverage-clover=.build/coverage/clover.xml --coverage-text --coverage-xml=.build/coverage/coverage-xml --log-junit=.build/coverage/phpunit.junit.xml"
+
+      - name: "Upload coverage to Codecov"
+        uses: "codecov/codecov-action@v3.1.4"
+        with:
+          file: ".build/coverage/clover.xml"
+          flags: "phpunit,php-${{ matrix.php-version }},${{ matrix.operating-system }}"
+          verbose: false
+
+      - name: "Run mutation tests with infection/infection"
+        env:
+          STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+        run: "vendor/bin/infection --show-mutations --only-covered --min-covered-msi=91 --min-msi=91 --coverage=.build/coverage --logger-github --no-progress -vv"
+
+  # This is a meta job to avoid to have to constantly change the protection rules
+  # whenever we touch the matrix.
+  tests-status:
+    name: "Unit & Integration Tests Status"
+
+    runs-on: "ubuntu-22.04"
+
+    if: always()
+
+    needs:
+      - "ci"
+      - "tests"
+      - "code-coverage"
+
+    steps:
+      - name: Successful run
+        if: ${{ !(contains(needs.*.result, 'failure')) }}
+        run: exit 0
+
+      - name: Failing run
+        if: ${{ contains(needs.*.result, 'failure') }}
+        run: exit 1

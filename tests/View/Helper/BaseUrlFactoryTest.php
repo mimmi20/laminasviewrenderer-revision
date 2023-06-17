@@ -1,0 +1,88 @@
+<?php
+/**
+ * This file is part of the mimmi20/laminasviewrenderer-revision package.
+ *
+ * Copyright (c) 2023, Thomas Mueller <mimmi20@live.de>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+declare(strict_types = 1);
+
+namespace Mimmi20\LaminasView\Revision\View\Helper;
+
+use Interop\Container\ContainerInterface;
+use Laminas\Http\PhpEnvironment\Request;
+use Laminas\Uri\Http;
+use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+
+final class BaseUrlFactoryTest extends TestCase
+{
+    private BaseUrlFactory $object;
+
+    /** @throws void */
+    protected function setUp(): void
+    {
+        $this->object = new BaseUrlFactory();
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function testInvokeHasRequest(): void
+    {
+        $uri = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $request = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $request->expects(self::once())
+            ->method('getUri')
+            ->willReturn($uri);
+
+        $container = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $container->expects(self::once())
+            ->method('has')
+            ->with('Request')
+            ->willReturn(true);
+        $container->expects(self::once())
+            ->method('get')
+            ->with('Request')
+            ->willReturn($request);
+
+        self::assertInstanceOf(BaseUrl::class, ($this->object)($container, 'test'));
+    }
+
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    public function testInvokeHasNoRequest(): void
+    {
+        $request = $this->getMockBuilder(Request::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $request->expects(self::never())
+            ->method('getUri');
+
+        $container = $this->getMockBuilder(ContainerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $container->expects(self::once())
+            ->method('has')
+            ->with('Request')
+            ->willReturn(false);
+        $container->expects(self::never())
+            ->method('get');
+
+        self::assertInstanceOf(BaseUrl::class, ($this->object)($container, 'test'));
+    }
+}
