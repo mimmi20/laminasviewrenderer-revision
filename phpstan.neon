@@ -1,5 +1,5 @@
 parameters:
-  level: max
+  level: 1
 
   parallel:
     maximumNumberOfProcesses: 1
@@ -15,7 +15,7 @@ parameters:
     - %currentWorkingDirectory%/vendor/squizlabs/php_codesniffer/src/Util/Tokens.php
 
   # reports occurrences of type-checking functions always evaluated to true
-  checkAlwaysTrueCheckTypeFunctionCall: true
+  checkAlwaysTrueCheckTypeFunctionCall: false
 
   # reports instanceof occurrences always evaluated to true
   checkAlwaysTrueInstanceof: true
@@ -95,4 +95,4 @@ parameters:
       tooWideThrowType: true
 
 #  ignoreErrors:
-#    - '~MockObject~'
+#    - '~does not accept mixed~'

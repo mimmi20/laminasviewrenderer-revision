@@ -1,6 +1,6 @@
 {
-  "name": "mimmi20/template",
-  "description": "Provides a GitHub repository template for a PHP library, using GitHub actions.",
+  "name": "mimmi20/laminasviewrenderer-revision",
+  "description": "Revision Viewhelper",
   "license": "MIT",
   "type": "library",
   "authors": [
@@ -8,20 +8,19 @@
       "name": "Thomas Müller",
       "homepage": "https://github.com/mimmi20",
       "role": "Developer"
-    },
-    {
-      "name": "Contributors",
-      "homepage": "https://github.com/mimmi20/template/graphs/contributors"
     }
   ],
-  "homepage": "https://github.com/mimmi20/template",
+  "homepage": "https://github.com/mimmi20/laminasviewrenderer-revision",
   "support": {
-    "issues": "https://github.com/mimmi20/template/issues",
-    "source": "https://github.com/mimmi20/template"
+    "issues": "https://github.com/mimmi20/laminasviewrenderer-revision/issues",
+    "source": "https://github.com/mimmi20/laminasviewrenderer-revision"
   },
   "require": {
     "php": "^8.1.0",
-    "ext-mbstring": "*"
+    "ext-json": "*",
+    "laminas/laminas-http": "^2.18.0",
+    "laminas/laminas-uri": "^2.10.0",
+    "laminas/laminas-view": "^2.28.0"
   },
   "require-dev": {
     "ext-ctype": "*",
@@ -31,18 +30,35 @@
     "ext-xml": "*",
     "ext-xmlwriter": "*",
     "infection/infection": "^0.27.0",
-    "mimmi20/coding-standard": "^5.0.5",
-    "nikic/php-parser": "^v4.15.5",
+    "laminas/laminas-modulemanager": "^2.14.0",
+    "laminas/laminas-servicemanager": "^3.21.0",
+    "mikey179/vfsstream": "^1.6.11",
+    "mimmi20/coding-standard": "^5.1.3",
+    "nikic/php-parser": "^v4.16.0",
     "phpstan/extension-installer": "^1.3.1",
-    "phpstan/phpstan": "^1.10.19",
+    "phpstan/phpstan": "^1.10.21",
     "phpstan/phpstan-deprecation-rules": "^1.1.3",
     "phpstan/phpstan-phpunit": "^1.3.13",
     "phpunit/phpunit": "^10.2.2",
-    "rector/rector": "^0.17.1",
-    "vimeo/psalm": "^5.12.0"
+    "rector/rector": "^0.17.2",
+    "vimeo/psalm": "^5.13.1"
+  },
+  "suggest": {
+    "laminas/laminas-modulemanager": "to register this project as module",
+    "laminas/laminas-servicemanager": "to use the navigation factories"
   },
   "minimum-stability": "stable",
   "prefer-stable": true,
+  "autoload": {
+    "psr-4": {
+      "Mimmi20\\LaminasView\\Revision\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Mimmi20\\LaminasView\\Revision\\": "tests/"
+    }
+  },
   "config": {
     "preferred-install": "dist",
     "lock": false,
@@ -51,6 +67,12 @@
       "dealerdirect/phpcodesniffer-composer-installer": true,
       "phpstan/extension-installer": true,
       "infection/extension-installer": true
+    }
+  },
+  "extra": {
+    "laminas": {
+      "component": "Mimmi20\\LaminasView\\Revision",
+      "config-provider": "Mimmi20\\LaminasView\\Revision\\ConfigProvider"
     }
   }
 }
