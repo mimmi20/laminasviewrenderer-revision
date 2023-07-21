@@ -13,12 +13,9 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
-use Laminas\View\Exception\BadMethodCallException;
-use Laminas\View\Helper\Doctype;
+use Laminas\View\Helper\Placeholder\Container\AbstractStandalone;
 use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
-use PHPUnit\Framework\Attributes\Depends;
-use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use ReflectionException;
 use ReflectionProperty;
@@ -28,15 +25,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
-    public function testAppendPackage(): RevisionInlineScript
+    public function testAppendPackage(): void
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -53,30 +47,46 @@ final class RevisionInlineScriptTest extends TestCase
             ->with('/abc.txt')
             ->willReturn('/abc_42.txt');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::any())
-            ->method('isXhtml')
-            ->willReturn(true);
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $renderer
-            ->expects(self::exactly(3))
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::once())
             ->method('__call')
-            ->willReturnMap(
-                [
-                    ['baseUrl', ['abc.txt', false, false], '/abc.txt'],
-                    ['serverUrl', ['/abc_42.txt'], 'https://www.test.de/abc_42.txt'],
-                    ['baseUrl', ['bcd.txt', false, false], ''],
-                ],
+            ->with(
+                'appendFile',
+                ['https://www.test.de/abc_42.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+            );
+
+        $renderer = $this->createMock(PhpRenderer::class);
+        $matcher  = self::exactly(4);
+        $renderer
+            ->expects($matcher)
+            ->method('__call')
+            ->willReturnCallback(
+                static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4 => self::assertSame('baseUrl', $method),
+                        3 => self::assertSame('serverUrl', $method),
+                        2 => self::assertSame('inlineScript', $method),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(['abc.txt', false, false], $argv),
+                        2 => self::assertSame([], $argv),
+                        3 => self::assertSame(['/abc_42.txt'], $argv),
+                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => '/abc.txt',
+                        2 => $inlineScript,
+                        3 => 'https://www.test.de/abc_42.txt',
+                        4 => '',
+                    };
+                },
             );
         $renderer
-            ->expects(self::any())
-            ->method('plugin')
-            ->with('doctype')
-            ->willReturn($docType);
+            ->expects(self::never())
+            ->method('plugin');
 
         $object = new RevisionInlineScript($minify);
         $view   = new ReflectionProperty($object, 'view');
@@ -89,22 +99,17 @@ final class RevisionInlineScriptTest extends TestCase
         );
 
         self::assertSame($object, $return);
-
-        return $return;
     }
 
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testAppendPackage2(): void
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -117,23 +122,43 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::any())
-            ->method('isXhtml')
-            ->willReturn(true);
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::never())
+            ->method('__call')
+            ->with('', []);
 
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
+        $matcher  = self::never();
+        $renderer
+            ->expects($matcher)
+            ->method('__call')
+            ->willReturnCallback(
+                static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4 => self::assertSame('baseUrl', $method),
+                        3 => self::assertSame('serverUrl', $method),
+                        2 => self::assertSame('headScript', $method),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(['abc.txt', false, false], $argv),
+                        2 => self::assertSame([], $argv),
+                        3 => self::assertSame(['/abc_42.txt'], $argv),
+                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => '/abc.txt',
+                        2 => $inlineScript,
+                        3 => 'https://www.test.de/abc_42.txt',
+                        4 => '',
+                    };
+                },
+            );
         $renderer
             ->expects(self::never())
-            ->method('__call');
-        $renderer
-            ->expects(self::any())
-            ->method('plugin')
-            ->with('doctype')
-            ->willReturn($docType);
+            ->method('plugin');
 
         $object = new RevisionInlineScript($minify);
         $view   = new ReflectionProperty($object, 'view');
@@ -151,15 +176,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testAppendPackage3(): void
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -172,23 +194,43 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::any())
-            ->method('isXhtml')
-            ->willReturn(true);
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::never())
+            ->method('__call')
+            ->with('', []);
 
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
+        $matcher  = self::never();
+        $renderer
+            ->expects($matcher)
+            ->method('__call')
+            ->willReturnCallback(
+                static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4 => self::assertSame('baseUrl', $method),
+                        3 => self::assertSame('serverUrl', $method),
+                        2 => self::assertSame('headScript', $method),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(['abc.txt', false, false], $argv),
+                        2 => self::assertSame([], $argv),
+                        3 => self::assertSame(['/abc_42.txt'], $argv),
+                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => '/abc.txt',
+                        2 => $inlineScript,
+                        3 => 'https://www.test.de/abc_42.txt',
+                        4 => '',
+                    };
+                },
+            );
         $renderer
             ->expects(self::never())
-            ->method('__call');
-        $renderer
-            ->expects(self::any())
-            ->method('plugin')
-            ->with('doctype')
-            ->willReturn($docType);
+            ->method('plugin');
 
         $object = new RevisionInlineScript($minify);
         $view   = new ReflectionProperty($object, 'view');
@@ -206,15 +248,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testAppendPackage4(): void
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -227,23 +266,43 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::any())
-            ->method('isXhtml')
-            ->willReturn(true);
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::never())
+            ->method('__call')
+            ->with('', []);
 
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
+        $matcher  = self::never();
+        $renderer
+            ->expects($matcher)
+            ->method('__call')
+            ->willReturnCallback(
+                static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4 => self::assertSame('baseUrl', $method),
+                        3 => self::assertSame('serverUrl', $method),
+                        2 => self::assertSame('headScript', $method),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(['abc.txt', false, false], $argv),
+                        2 => self::assertSame([], $argv),
+                        3 => self::assertSame(['/abc_42.txt'], $argv),
+                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => '/abc.txt',
+                        2 => $inlineScript,
+                        3 => 'https://www.test.de/abc_42.txt',
+                        4 => '',
+                    };
+                },
+            );
         $renderer
             ->expects(self::never())
-            ->method('__call');
-        $renderer
-            ->expects(self::any())
-            ->method('plugin')
-            ->with('doctype')
-            ->willReturn($docType);
+            ->method('plugin');
 
         $object = new RevisionInlineScript($minify);
         $view   = new ReflectionProperty($object, 'view');
@@ -261,15 +320,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testAppendFile(): RevisionInlineScript
     {
         $href = 'https://www.test.de/abc.txt';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::never())
             ->method('getPackageFiles');
@@ -284,23 +340,24 @@ final class RevisionInlineScriptTest extends TestCase
             ->with($href)
             ->willReturn('https://www.test.de/abc_42.txt');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::any())
-            ->method('isXhtml')
-            ->willReturn(true);
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::once())
+            ->method('__call')
+            ->with(
+                'appendFile',
+                ['https://www.test.de/abc_42.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+            );
 
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
+        $renderer
+            ->expects(self::once())
+            ->method('__call')
+            ->with('inlineScript', [])
+            ->willReturn($inlineScript);
         $renderer
             ->expects(self::never())
-            ->method('__call');
-        $renderer
-            ->expects(self::any())
-            ->method('plugin')
-            ->with('doctype')
-            ->willReturn($docType);
+            ->method('plugin');
 
         $object = new RevisionInlineScript($minify);
         $view   = new ReflectionProperty($object, 'view');
@@ -320,15 +377,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testAppendFile2(): RevisionInlineScript
     {
         $href = 'https://www.test.de/abc.txt';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::never())
             ->method('getPackageFiles');
@@ -339,23 +393,24 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::any())
-            ->method('isXhtml')
-            ->willReturn(true);
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::once())
+            ->method('__call')
+            ->with(
+                'appendFile',
+                ['/abc.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+            );
 
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
+        $renderer
+            ->expects(self::once())
+            ->method('__call')
+            ->with('inlineScript', [])
+            ->willReturn($inlineScript);
         $renderer
             ->expects(self::never())
-            ->method('__call');
-        $renderer
-            ->expects(self::any())
-            ->method('plugin')
-            ->with('doctype')
-            ->willReturn($docType);
+            ->method('plugin');
 
         $object = new RevisionInlineScript($minify);
         $view   = new ReflectionProperty($object, 'view');
@@ -378,15 +433,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testPrependPackage(): void
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -403,23 +455,39 @@ final class RevisionInlineScriptTest extends TestCase
             ->with('/abc.txt')
             ->willReturn('/abc_42.txt');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $renderer
-            ->expects(self::exactly(3))
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::once())
             ->method('__call')
-            ->willReturnMap(
-                [
-                    ['baseUrl', ['bcd.txt', false, false], '/abc.txt'],
-                    ['serverUrl', ['/abc_42.txt'], 'https://www.test.de/abc_42.txt'],
-                    ['baseUrl', ['abc.txt', false, false], ''],
-                ],
+            ->with('prependFile', ['https://www.test.de/abc_42.txt', 'text/javascript', []]);
+
+        $renderer = $this->createMock(PhpRenderer::class);
+        $matcher  = self::exactly(4);
+        $renderer
+            ->expects($matcher)
+            ->method('__call')
+            ->willReturnCallback(
+                static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
+                    match ($matcher->numberOfInvocations()) {
+                        1, 4 => self::assertSame('baseUrl', $method),
+                        3 => self::assertSame('serverUrl', $method),
+                        2 => self::assertSame('inlineScript', $method),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(['bcd.txt', false, false], $argv),
+                        2 => self::assertSame([], $argv),
+                        3 => self::assertSame(['/abc_42.txt'], $argv),
+                        4 => self::assertSame(['abc.txt', false, false], $argv),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => '/abc.txt',
+                        2 => $inlineScript,
+                        3 => 'https://www.test.de/abc_42.txt',
+                        4 => '',
+                    };
+                },
             );
         $renderer
             ->expects(self::never())
@@ -437,15 +505,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testPrependPackage2(): void
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -458,14 +523,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
         $renderer
             ->expects(self::never())
             ->method('__call');
@@ -485,15 +543,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testPrependPackage3(): void
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -506,14 +561,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
         $renderer
             ->expects(self::never())
             ->method('__call');
@@ -533,15 +581,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testPrependPackage4(): void
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -554,14 +599,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
         $renderer
             ->expects(self::never())
             ->method('__call');
@@ -581,15 +619,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testPrependFile(): void
     {
         $href = 'https://www.test.de/abc.txt';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::never())
             ->method('getPackageFiles');
@@ -604,17 +639,18 @@ final class RevisionInlineScriptTest extends TestCase
             ->with($href)
             ->willReturn('https://www.test.de/abc_42.txt');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::once())
+            ->method('__call')
+            ->with('prependFile', ['https://www.test.de/abc_42.txt', 'text/javascript', []]);
 
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
         $renderer
-            ->expects(self::never())
-            ->method('__call');
+            ->expects(self::once())
+            ->method('__call')
+            ->with('inlineScript', [])
+            ->willReturn($inlineScript);
         $renderer
             ->expects(self::never())
             ->method('plugin');
@@ -631,15 +667,12 @@ final class RevisionInlineScriptTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function testPrependFile2(): void
     {
         $href = 'https://www.test.de/abc.txt';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::never())
             ->method('getPackageFiles');
@@ -650,17 +683,21 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
+        $inlineScript = $this->createMock(AbstractStandalone::class);
+        $inlineScript
+            ->expects(self::once())
+            ->method('__call')
+            ->with(
+                'prependFile',
+                ['/abc.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+            );
 
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
         $renderer
-            ->expects(self::never())
-            ->method('__call');
+            ->expects(self::once())
+            ->method('__call')
+            ->with('inlineScript', [])
+            ->willReturn($inlineScript);
         $renderer
             ->expects(self::never())
             ->method('plugin');
@@ -689,9 +726,7 @@ final class RevisionInlineScriptTest extends TestCase
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -708,16 +743,10 @@ final class RevisionInlineScriptTest extends TestCase
             ->with('/abc.txt')
             ->willReturn('/abc_42.txt');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
+        $matcher  = self::exactly(3);
         $renderer
-            ->expects(self::exactly(3))
+            ->expects($matcher)
             ->method('__call')
             ->willReturnMap(
                 [
@@ -750,9 +779,7 @@ final class RevisionInlineScriptTest extends TestCase
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -765,14 +792,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
         $renderer
             ->expects(self::never())
             ->method('__call');
@@ -797,9 +817,7 @@ final class RevisionInlineScriptTest extends TestCase
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -812,14 +830,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
         $renderer
             ->expects(self::never())
             ->method('__call');
@@ -844,9 +855,7 @@ final class RevisionInlineScriptTest extends TestCase
     {
         $package = 'test-package';
 
-        $minify = $this->getMockBuilder(MinifyInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $minify = $this->createMock(MinifyInterface::class);
         $minify
             ->expects(self::once())
             ->method('getPackageFiles')
@@ -859,14 +868,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('addRevision');
 
-        $docType = $this->getMockBuilder(Doctype::class)->getMock();
-        $docType
-            ->expects(self::never())
-            ->method('isXhtml');
-
-        $renderer = $this->getMockBuilder(PhpRenderer::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $renderer = $this->createMock(PhpRenderer::class);
         $renderer
             ->expects(self::never())
             ->method('__call');
@@ -881,25 +883,5 @@ final class RevisionInlineScriptTest extends TestCase
         $return = $object->listPackage($package);
 
         self::assertSame([], $return);
-    }
-
-    /** @throws Exception */
-    #[Depends('testAppendPackage')]
-    public function testToStringWithoutIndent(RevisionInlineScript $object): void
-    {
-        self::assertSame(
-            '<!--[if !IE]><!--><script type="text/javascript" async="async" class="test-class" src="https://www.test.de/abc_42.txt"></script><!--<![endif]-->',
-            $object->toString(),
-        );
-    }
-
-    /** @throws Exception */
-    #[Depends('testAppendPackage')]
-    public function testToStringWithIndent(RevisionInlineScript $object): void
-    {
-        self::assertSame(
-            '    <!--[if !IE]><!--><script type="text/javascript" async="async" class="test-class" src="https://www.test.de/abc_42.txt"></script><!--<![endif]-->',
-            $object->toString(4),
-        );
     }
 }

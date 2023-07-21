@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
-use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Renderer\RendererInterface as Renderer;
 use Mimmi20\LaminasView\Revision\Minify;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
@@ -48,7 +47,6 @@ trait PackageTrait
      * @phpstan-param array<string, string> $attrs
      *
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function appendPackage(
         string $package,
@@ -99,7 +97,6 @@ trait PackageTrait
      * @phpstan-param array<string, string> $attrs
      *
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function prependPackage(
         string $package,
@@ -193,54 +190,6 @@ trait PackageTrait
         }
 
         return $scripts;
-    }
-
-    /**
-     * @param array<string> $attrs
-     * @phpstan-param array<string, string> $attrs
-     *
-     * @throws InvalidArgumentException
-     * @throws BadMethodCallException
-     */
-    public function appendFile(
-        string $src,
-        string $type = 'text/javascript',
-        array $attrs = [],
-        bool $absolute = true,
-        string $pathPrefix = '',
-        bool $addRevision = true,
-    ): self {
-        if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $src)) {
-            $src = $this->minify->addRevision($src);
-        }
-
-        parent::appendFile($this->getUrl($src, $absolute, $pathPrefix), $type, $attrs);
-
-        return $this;
-    }
-
-    /**
-     * @param array<string> $attrs
-     * @phpstan-param array<string, string> $attrs
-     *
-     * @throws InvalidArgumentException
-     * @throws BadMethodCallException
-     */
-    public function prependFile(
-        string $src,
-        string $type = 'text/javascript',
-        array $attrs = [],
-        bool $absolute = true,
-        string $pathPrefix = '',
-        bool $addRevision = true,
-    ): self {
-        if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $src)) {
-            $src = $this->minify->addRevision($src);
-        }
-
-        parent::prependFile($this->getUrl($src, $absolute, $pathPrefix), $type, $attrs);
-
-        return $this;
     }
 
     /**

@@ -41,6 +41,29 @@ final class MinifyTest extends TestCase
      * @throws ReflectionException
      * @throws JsonException
      */
+    public function testConstructFailsIfFileIsNotReadable(): void
+    {
+        $configFile = 'configTest.php';
+        $structure  = [$configFile => null];
+
+        vfsStream::setup('root', null, $structure);
+
+        $minify = new Minify(vfsStream::url('root/' . $configFile), null, null, false);
+
+        $groupsProp = new ReflectionProperty($minify, 'groups');
+
+        $groups = $groupsProp->getValue($minify);
+
+        self::assertIsArray($groups);
+        self::assertCount(0, $groups);
+        self::assertFalse($minify->hasPackage('detect-js'));
+        self::assertFalse($minify->isEnabled());
+    }
+
+    /**
+     * @throws ReflectionException
+     * @throws JsonException
+     */
     public function testConstructOk(): Minify
     {
         $configFile = 'configTest.php';
@@ -70,6 +93,8 @@ final class MinifyTest extends TestCase
 
         $groups = $groupsProp->getValue($minify);
 
+        self::assertIsArray($groups);
+        self::assertCount(1, $groups);
         self::assertArrayHasKey('detect-js', $groups);
         self::assertTrue($minify->hasPackage('detect-js'));
         self::assertTrue($minify->isEnabled());

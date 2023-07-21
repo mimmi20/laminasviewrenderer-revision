@@ -23,9 +23,7 @@ final class BaseUrlTest extends TestCase
     {
         $resource = '/abc';
 
-        $uri = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $uri = $this->createMock(Http::class);
         $uri->expects(self::once())
             ->method('setPath')
             ->with($resource)
@@ -59,7 +57,7 @@ final class BaseUrlTest extends TestCase
     {
         $resource = '/abc';
 
-        $uri = $this->getMockBuilder(Http::class)->getMock();
+        $uri = $this->createMock(Http::class);
         $uri->expects(self::once())
             ->method('setPath')
             ->with($resource)

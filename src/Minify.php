@@ -72,7 +72,7 @@ final class Minify implements MinifyInterface
             return;
         }
 
-        $content = file_get_contents($groupsFile);
+        $content = @file_get_contents($groupsFile);
 
         if ($content === false) {
             return;

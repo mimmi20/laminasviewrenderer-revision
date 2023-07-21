@@ -12,11 +12,11 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
-use Interop\Container\ContainerInterface;
 use Laminas\Http\PhpEnvironment\Request;
 use Laminas\Uri\Http;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 final class BaseUrlFactoryTest extends TestCase
@@ -35,20 +35,14 @@ final class BaseUrlFactoryTest extends TestCase
      */
     public function testInvokeHasRequest(): void
     {
-        $uri = $this->getMockBuilder(Http::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $uri = $this->createMock(Http::class);
 
-        $request = $this->getMockBuilder(Request::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->createMock(Request::class);
         $request->expects(self::once())
             ->method('getUri')
             ->willReturn($uri);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('has')
             ->with('Request')
@@ -67,15 +61,11 @@ final class BaseUrlFactoryTest extends TestCase
      */
     public function testInvokeHasNoRequest(): void
     {
-        $request = $this->getMockBuilder(Request::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $request = $this->createMock(Request::class);
         $request->expects(self::never())
             ->method('getUri');
 
-        $container = $this->getMockBuilder(ContainerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('has')
             ->with('Request')
