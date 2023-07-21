@@ -13,8 +13,7 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
-use Laminas\View\Exception\BadMethodCallException;
-use Laminas\View\Helper\HeadLink;
+use Laminas\View\Helper\AbstractHelper;
 use Mimmi20\LaminasView\Revision\Minify;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 
@@ -29,23 +28,14 @@ use function is_array;
  * @method string getIndent()
  * @method string getSeparator()
  */
-final class RevisionHeadLink extends HeadLink
+final class RevisionHeadLink extends AbstractHelper
 {
     use GetUrlTrait;
-
-    /**
-     * Flag whether to automatically escape output, must also be
-     * enforced in the child class if __toString/toString is overridden
-     *
-     * @var bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
-     */
-    protected $autoEscape = false;
 
     /** @throws void */
     public function __construct(private readonly MinifyInterface $minify)
     {
-        parent::__construct();
+        // nothing to do
     }
 
     /**
@@ -58,7 +48,6 @@ final class RevisionHeadLink extends HeadLink
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function appendPackage(
         string $package,
@@ -114,7 +103,6 @@ final class RevisionHeadLink extends HeadLink
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function prependPackage(
         string $package,
@@ -224,7 +212,6 @@ final class RevisionHeadLink extends HeadLink
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function appendStylesheet(
         string $href,
@@ -241,7 +228,7 @@ final class RevisionHeadLink extends HeadLink
 
         unset($extras['rel']);
 
-        parent::appendStylesheet(
+        $this->getView()->headLink()->appendStylesheet(
             $this->getUrl($href, $absolute, $pathPrefix),
             $media,
             $conditionalStylesheet,
@@ -258,7 +245,6 @@ final class RevisionHeadLink extends HeadLink
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
-     * @throws BadMethodCallException
      */
     public function prependStylesheet(
         string $href,
@@ -275,7 +261,7 @@ final class RevisionHeadLink extends HeadLink
 
         unset($extras['rel']);
 
-        parent::prependStylesheet(
+        $this->getView()->headLink()->prependStylesheet(
             $this->getUrl($href, $absolute, $pathPrefix),
             $media,
             $conditionalStylesheet,

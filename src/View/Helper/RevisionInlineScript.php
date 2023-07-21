@@ -12,7 +12,9 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
-use Laminas\View\Helper\InlineScript;
+use Laminas\Uri\Exception\InvalidArgumentException;
+use Laminas\View\Helper\AbstractHelper;
+use Mimmi20\LaminasView\Revision\Minify;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 
 /**
@@ -27,43 +29,67 @@ use Mimmi20\LaminasView\Revision\MinifyInterface;
  * @method string getIndent()
  * @method string getSeparator()
  */
-final class RevisionInlineScript extends InlineScript
+final class RevisionInlineScript extends AbstractHelper
 {
     use PackageTrait;
-
-    /**
-     * Flag whether to automatically escape output, must also be
-     * enforced in the child class if __toString/toString is overridden
-     *
-     * @var bool
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
-     */
-    protected $autoEscape = false;
-
-    /**
-     * Optional allowed attributes for script tag
-     *
-     * @var array<string>
-     * @phpstan-var array<int, string>
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.PropertyTypeHint.MissingNativeTypeHint
-     */
-    protected $optionalAttributes = [
-        'charset',
-        'integrity',
-        'crossorigin',
-        'defer',
-        'async',
-        'language',
-        'src',
-        'id',
-        'class',
-    ];
 
     /** @throws void */
     public function __construct(MinifyInterface $minify)
     {
-        parent::__construct();
-
         $this->minify = $minify;
+    }
+
+    /**
+     * @param array<string> $attrs
+     * @phpstan-param array<string, string> $attrs
+     *
+     * @throws InvalidArgumentException
+     */
+    public function appendFile(
+        string $src,
+        string $type = 'text/javascript',
+        array $attrs = [],
+        bool $absolute = true,
+        string $pathPrefix = '',
+        bool $addRevision = true,
+    ): self {
+        if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $src)) {
+            $src = $this->minify->addRevision($src);
+        }
+
+        $this->getView()->inlineScript()->appendFile(
+            $this->getUrl($src, $absolute, $pathPrefix),
+            $type,
+            $attrs,
+        );
+
+        return $this;
+    }
+
+    /**
+     * @param array<string> $attrs
+     * @phpstan-param array<string, string> $attrs
+     *
+     * @throws InvalidArgumentException
+     */
+    public function prependFile(
+        string $src,
+        string $type = 'text/javascript',
+        array $attrs = [],
+        bool $absolute = true,
+        string $pathPrefix = '',
+        bool $addRevision = true,
+    ): self {
+        if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $src)) {
+            $src = $this->minify->addRevision($src);
+        }
+
+        $this->getView()->inlineScript()->prependFile(
+            $this->getUrl($src, $absolute, $pathPrefix),
+            $type,
+            $attrs,
+        );
+
+        return $this;
     }
 }

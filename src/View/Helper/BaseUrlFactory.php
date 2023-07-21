@@ -12,9 +12,9 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 /**

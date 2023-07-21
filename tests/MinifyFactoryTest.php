@@ -12,10 +12,10 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision;
 
-use Interop\Container\ContainerInterface;
 use Mimmi20\LaminasView\Revision\Config\MinifyConfigInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 
 final class MinifyFactoryTest extends TestCase
 {
@@ -30,7 +30,7 @@ final class MinifyFactoryTest extends TestCase
     /** @throws ContainerExceptionInterface */
     public function testInvoke(): void
     {
-        $minifyConfig = $this->getMockBuilder(MinifyConfigInterface::class)->getMock();
+        $minifyConfig = $this->createMock(MinifyConfigInterface::class);
         $minifyConfig->expects(self::once())
             ->method('isEnabled')
             ->willReturn(true);
@@ -38,7 +38,7 @@ final class MinifyFactoryTest extends TestCase
             ->method('getRevision')
             ->willReturn(null);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(MinifyConfigInterface::class)
@@ -52,7 +52,7 @@ final class MinifyFactoryTest extends TestCase
     {
         $revision = '565656556';
 
-        $minifyConfig = $this->getMockBuilder(MinifyConfigInterface::class)->getMock();
+        $minifyConfig = $this->createMock(MinifyConfigInterface::class);
         $minifyConfig->expects(self::once())
             ->method('isEnabled')
             ->willReturn(true);
@@ -60,7 +60,7 @@ final class MinifyFactoryTest extends TestCase
             ->method('getRevision')
             ->willReturn($revision);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(MinifyConfigInterface::class)

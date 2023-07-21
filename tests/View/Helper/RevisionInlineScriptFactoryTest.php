@@ -12,10 +12,10 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
-use Interop\Container\ContainerInterface;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
 final class RevisionInlineScriptFactoryTest extends TestCase
@@ -36,7 +36,7 @@ final class RevisionInlineScriptFactoryTest extends TestCase
     {
         $minify = $this->createMock(MinifyInterface::class);
 
-        $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $container = $this->createMock(ContainerInterface::class);
         $container->expects(self::once())
             ->method('get')
             ->with(MinifyInterface::class)
