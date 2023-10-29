@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision;
 
+use JsonException;
 use Mimmi20\LaminasView\Revision\Config\MinifyConfigInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -27,7 +28,10 @@ final class MinifyFactoryTest extends TestCase
         $this->object = new MinifyFactory();
     }
 
-    /** @throws ContainerExceptionInterface */
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws JsonException
+     */
     public function testInvoke(): void
     {
         $minifyConfig = $this->createMock(MinifyConfigInterface::class);
@@ -47,7 +51,10 @@ final class MinifyFactoryTest extends TestCase
         self::assertInstanceOf(Minify::class, ($this->object)($container, 'test'));
     }
 
-    /** @throws ContainerExceptionInterface */
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws JsonException
+     */
     public function testInvokeWithRevisionFile(): void
     {
         $revision = '565656556';

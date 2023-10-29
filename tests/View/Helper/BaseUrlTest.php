@@ -12,13 +12,17 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
+use Laminas\Uri\Exception\InvalidArgumentException;
 use Laminas\Uri\Http;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 final class BaseUrlTest extends TestCase
 {
-    /** @throws Exception */
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
     public function testInvokeWithoutHost(): void
     {
         $resource = '/abc';
@@ -52,7 +56,10 @@ final class BaseUrlTest extends TestCase
         self::assertSame($resource, $object($resource, false, true));
     }
 
-    /** @throws Exception */
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
     public function testInvokeWithHost(): void
     {
         $resource = '/abc';
@@ -91,7 +98,10 @@ final class BaseUrlTest extends TestCase
         self::assertSame($resource, $object($resource, true));
     }
 
-    /** @throws Exception */
+    /**
+     * @throws Exception
+     * @throws InvalidArgumentException
+     */
     public function testInvokeWithoutUri(): void
     {
         $resource = '/abc';
