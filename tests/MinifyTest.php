@@ -69,19 +69,19 @@ final class MinifyTest extends TestCase
         $configFile = 'configTest.php';
         $structure  = [
             $configFile => '{
-  "assets": {
-    "detect-js": {
-      "input": [
-        "/assets/js/lib/detection/modernizr-custom.js",
-        "/assets/js/lib/detection/detectizr.js",
-        "/assets/js/lib/detection/ua-parser.js",
-        "/assets/js/lib/detection/base.js"
-      ],
-      "fileName": "detection.min.js",
-      "attr": null,
-      "include": true
+    "assets": {
+        "detect-js": {
+            "input": [
+                "/assets/js/lib/detection/modernizr-custom.js",
+                "/assets/js/lib/detection/detectizr.js",
+                "/assets/js/lib/detection/ua-parser.js",
+                "/assets/js/lib/detection/base.js"
+            ],
+            "fileName": "detection.min.js",
+            "attr": null,
+            "include": true
+        }
     }
-  }
 }',
         ];
 
@@ -126,19 +126,19 @@ final class MinifyTest extends TestCase
                 ],
             ],
             $configFile => '{
-  "assets": {
-    "detect-js": {
-      "input": [
-        "/assets/js/lib/detection/modernizr-custom.js",
-        "/assets/js/lib/detection/detectizr.js",
-        "/assets/js/lib/detection/ua-parser.js",
-        "/assets/js/lib/detection/base.js"
-      ],
-      "fileName": "' . $group . '",
-      "attr": null,
-      "include": true
+    "assets": {
+        "detect-js": {
+            "input": [
+                "/assets/js/lib/detection/modernizr-custom.js",
+                "/assets/js/lib/detection/detectizr.js",
+                "/assets/js/lib/detection/ua-parser.js",
+                "/assets/js/lib/detection/base.js"
+            ],
+            "fileName": "' . $group . '",
+            "attr": null,
+            "include": true
+        }
     }
-  }
 }',
         ];
 
@@ -173,19 +173,19 @@ final class MinifyTest extends TestCase
                 ],
             ],
             $configFile => '{
-  "assets": {
-    "detect-js": {
-      "input": [
-        "/assets/js/lib/detection/modernizr-custom.js",
-        "/assets/js/lib/detection/detectizr.js",
-        "/assets/js/lib/detection/ua-parser.js",
-        "/assets/js/lib/detection/base.js"
-      ],
-      "fileName": "' . $group . '",
-      "attr": null,
-      "include": true
+    "assets": {
+        "detect-js": {
+            "input": [
+                "/assets/js/lib/detection/modernizr-custom.js",
+                "/assets/js/lib/detection/detectizr.js",
+                "/assets/js/lib/detection/ua-parser.js",
+                "/assets/js/lib/detection/base.js"
+            ],
+            "fileName": "' . $group . '",
+            "attr": null,
+            "include": true
+        }
     }
-  }
 }',
         ];
 
@@ -220,8 +220,8 @@ final class MinifyTest extends TestCase
                 ],
             ],
             $configFile => '{
-  "assets": {
-  }
+    "assets": {
+    }
 }',
         ];
 
@@ -256,18 +256,18 @@ final class MinifyTest extends TestCase
                 ],
             ],
             $configFile => '{
-  "assets": {
-    "detect-js": {
-      "input": [
-        "/assets/js/lib/detection/modernizr-custom.js",
-        "/assets/js/lib/detection/detectizr.js",
-        "/assets/js/lib/detection/ua-parser.js",
-        "/assets/js/lib/detection/base.js"
-      ],
-      "attr": null,
-      "include": true
+    "assets": {
+        "detect-js": {
+            "input": [
+                "/assets/js/lib/detection/modernizr-custom.js",
+                "/assets/js/lib/detection/detectizr.js",
+                "/assets/js/lib/detection/ua-parser.js",
+                "/assets/js/lib/detection/base.js"
+            ],
+            "attr": null,
+            "include": true
+        }
     }
-  }
 }',
         ];
 
@@ -302,13 +302,13 @@ final class MinifyTest extends TestCase
                 ],
             ],
             $configFile => '{
-  "assets": {
-    "detect-js": {
-      "fileName": "' . $group . '",
-      "attr": null,
-      "include": true
+    "assets": {
+        "detect-js": {
+            "fileName": "' . $group . '",
+            "attr": null,
+            "include": true
+        }
     }
-  }
 }',
         ];
 
@@ -421,31 +421,31 @@ final class MinifyTest extends TestCase
                 ],
             ],
             $configFile => '{
-  "assets": {
-    "detect-js": {
-      "input": [
-        "admin-js",
-        "/assets/js/lib/detection/modernizr-custom.js",
-        "/assets/js/lib/detection/detectizr.js",
-        "/assets/js/lib/detection/ua-parser.js",
-        "/assets/js/lib/detection/base.js"
-      ],
-      "fileName": "' . $group1 . '",
-      "attr": null,
-      "include": true
-    },
-    "admin-js": {
-      "input": [
-        "detect-js",
-        "/assets/js/lib/detection/base.js",
-        "/js/lib/bootstrap-datepicker.min.js",
-        "/js/lib/bootstrap-datepicker.de.min.js"
-      ],
-      "fileName": "' . $group2 . '",
-      "attr": null,
-      "include": true
+    "assets": {
+        "detect-js": {
+            "input": [
+                "admin-js",
+                "/assets/js/lib/detection/modernizr-custom.js",
+                "/assets/js/lib/detection/detectizr.js",
+                "/assets/js/lib/detection/ua-parser.js",
+                "/assets/js/lib/detection/base.js"
+            ],
+            "fileName": "' . $group1 . '",
+            "attr": null,
+            "include": true
+        },
+        "admin-js": {
+            "input": [
+                "detect-js",
+                "/assets/js/lib/detection/base.js",
+                "/js/lib/bootstrap-datepicker.min.js",
+                "/js/lib/bootstrap-datepicker.de.min.js"
+            ],
+            "fileName": "' . $group2 . '",
+            "attr": null,
+            "include": true
+        }
     }
-  }
 }',
         ];
 
@@ -484,31 +484,31 @@ final class MinifyTest extends TestCase
                 ],
             ],
             $configFile => '{
-  "assets": {
-    "detect-js": {
-      "input": [
-        "admin-js",
-        "/assets/js/lib/detection/modernizr-custom.js",
-        "/assets/js/lib/detection/detectizr.js",
-        "/assets/js/lib/detection/ua-parser.js",
-        "/assets/js/lib/detection/base.js"
-      ],
-      "fileName": "' . $group1 . '",
-      "attr": null,
-      "include": true
-    },
-    "admin-js": {
-      "input": [
-        "detect-js",
-        "/assets/js/lib/detection/base.js",
-        "/js/lib/bootstrap-datepicker.min.js",
-        "/js/lib/bootstrap-datepicker.de.min.js"
-      ],
-      "fileName": "' . $group2 . '",
-      "attr": null,
-      "include": true
+    "assets": {
+        "detect-js": {
+            "input": [
+                "admin-js",
+                "/assets/js/lib/detection/modernizr-custom.js",
+                "/assets/js/lib/detection/detectizr.js",
+                "/assets/js/lib/detection/ua-parser.js",
+                "/assets/js/lib/detection/base.js"
+            ],
+            "fileName": "' . $group1 . '",
+            "attr": null,
+            "include": true
+        },
+        "admin-js": {
+            "input": [
+                "detect-js",
+                "/assets/js/lib/detection/base.js",
+                "/js/lib/bootstrap-datepicker.min.js",
+                "/js/lib/bootstrap-datepicker.de.min.js"
+            ],
+            "fileName": "' . $group2 . '",
+            "attr": null,
+            "include": true
+        }
     }
-  }
 }',
         ];
 
