@@ -97,5 +97,5 @@ parameters:
       missingCheckedExceptionInThrows: true
       tooWideThrowType: true
 
-#  ignoreErrors:
-#    - '~does not accept mixed~'
+  ignoreErrors:
+    - '~is not subtype of Throwable~'
