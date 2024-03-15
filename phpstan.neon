@@ -98,4 +98,4 @@ parameters:
       tooWideThrowType: true
 
 #  ignoreErrors:
-#    - '~does not accept mixed~'
+#    - '~is not subtype of Throwable~'
