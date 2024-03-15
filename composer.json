@@ -18,9 +18,9 @@
   "require": {
     "php": "^8.1.0",
     "ext-json": "*",
-    "laminas/laminas-http": "^2.19.0",
     "laminas/laminas-uri": "^2.11.0",
-    "laminas/laminas-view": "^2.34.0"
+    "laminas/laminas-view": "^2.34.0",
+    "psr/container": "^1.1.2 || ^2.0.2"
   },
   "require-dev": {
     "ext-ctype": "*",
@@ -30,6 +30,7 @@
     "ext-xml": "*",
     "ext-xmlwriter": "*",
     "infection/infection": "^0.27.10",
+    "laminas/laminas-http": "^2.19.0",
     "laminas/laminas-modulemanager": "^2.15.0",
     "laminas/laminas-servicemanager": "^3.22.1",
     "mikey179/vfsstream": "^1.6.11",
