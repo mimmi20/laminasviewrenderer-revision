@@ -38,7 +38,7 @@ interface MinifyInterface
      * package.
      *
      * @return array<array<string>>
-     * @phpstan-return array{files: array<int, string>, attr: array<int, string>}
+     * @phpstan-return array{files?: array<int, string>, attr: array<int, string>}
      *
      * @throws void
      */
