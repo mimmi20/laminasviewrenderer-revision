@@ -49,7 +49,7 @@ final class Minify implements MinifyInterface
 
     /**
      * @var array<array<array<string>>>|array<array<string>>
-     * @phpstan-var array<string, array{fileName: string, input: array<int, string>, attr: array<int, string>|null}>
+     * @phpstan-var array<string, array{fileName?: string, input?: array<int, string>, attr: array<int, string>|null}>
      */
     private array $groups = [];
 
@@ -99,7 +99,7 @@ final class Minify implements MinifyInterface
      * package.
      *
      * @return array<array<string>>
-     * @phpstan-return array{files: array<int, string>, attr: array<int, string>}
+     * @phpstan-return array{files?: array<int, string>, attr: array<int, string>}
      *
      * @throws void
      */
