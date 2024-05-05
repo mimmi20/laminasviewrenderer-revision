@@ -16,7 +16,7 @@
     "source": "https://github.com/mimmi20/laminasviewrenderer-revision"
   },
   "require": {
-    "php": "^8.1.0",
+    "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
     "ext-json": "*",
     "laminas/laminas-uri": "^2.11.0",
     "laminas/laminas-view": "^2.34.0",
