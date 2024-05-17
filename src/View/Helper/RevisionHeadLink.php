@@ -48,6 +48,8 @@ final class RevisionHeadLink extends AbstractHelper
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
+     *
+     * @api
      */
     public function appendPackage(
         string $package,
@@ -103,6 +105,8 @@ final class RevisionHeadLink extends AbstractHelper
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
+     *
+     * @api
      */
     public function prependPackage(
         string $package,
@@ -161,6 +165,8 @@ final class RevisionHeadLink extends AbstractHelper
      * @phpstan-return array<int, array{path: string, media: string, conditional: bool|string, extra: array<string, string>}>
      *
      * @throws InvalidArgumentException
+     *
+     * @api
      */
     public function listPackage(
         string $package,

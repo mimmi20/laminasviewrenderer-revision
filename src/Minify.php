@@ -33,10 +33,6 @@ use const JSON_THROW_ON_ERROR;
  */
 final class Minify implements MinifyInterface
 {
-    public const FILETYPE_JS = 'js';
-
-    public const FILETYPE_CSS = 'css';
-
     /**
      * Standardrevision
      */
@@ -137,7 +133,7 @@ final class Minify implements MinifyInterface
     }
 
     /**
-     * @param string $type (css|js)
+     * @param MinifyInterface::FILETYPE_* $type (css|js)
      *
      * @throws void
      */
@@ -244,6 +240,6 @@ final class Minify implements MinifyInterface
      */
     private function isSupportedType(string $type): bool
     {
-        return $type === self::FILETYPE_CSS || $type === self::FILETYPE_JS;
+        return $type === MinifyInterface::FILETYPE_CSS || $type === MinifyInterface::FILETYPE_JS;
     }
 }
