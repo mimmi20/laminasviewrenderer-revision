@@ -23,6 +23,8 @@ interface MinifyInterface
 
     /**
      * Standardrevision
+     *
+     * @api
      */
     public const DEFAULT_REVISION = '1';
 
@@ -48,7 +50,7 @@ interface MinifyInterface
     public function isEnabled(): bool;
 
     /**
-     * @param string $type (css|js)
+     * @param self::FILETYPE_* $type (css|js)
      *
      * @throws void
      */
