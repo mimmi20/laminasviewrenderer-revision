@@ -12,8 +12,6 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision;
 
-use Laminas\ModuleManager\Feature\ServiceProviderInterface;
-use Laminas\ModuleManager\Feature\ViewHelperProviderInterface;
 use Mimmi20\LaminasView\Revision\View\Helper\BaseUrl;
 use Mimmi20\LaminasView\Revision\View\Helper\BaseUrlFactory;
 use Mimmi20\LaminasView\Revision\View\Helper\RevisionHeadLink;
@@ -23,7 +21,7 @@ use Mimmi20\LaminasView\Revision\View\Helper\RevisionHeadScriptFactory;
 use Mimmi20\LaminasView\Revision\View\Helper\RevisionInlineScript;
 use Mimmi20\LaminasView\Revision\View\Helper\RevisionInlineScriptFactory;
 
-final class ConfigProvider implements ServiceProviderInterface, ViewHelperProviderInterface
+final class ConfigProvider
 {
     /**
      * Returns configuration from file
