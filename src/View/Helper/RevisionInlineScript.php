@@ -13,7 +13,9 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
+use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Helper\AbstractHelper;
+use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\Minify;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 
@@ -34,7 +36,7 @@ final class RevisionInlineScript extends AbstractHelper
     use PackageTrait;
 
     /** @throws void */
-    public function __construct(MinifyInterface $minify)
+    public function __construct(MinifyInterface $minify, private readonly PhpRenderer $renderer)
     {
         $this->minify = $minify;
     }
@@ -44,6 +46,7 @@ final class RevisionInlineScript extends AbstractHelper
      * @phpstan-param array<string, string> $attrs
      *
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function appendFile(
         string $src,
@@ -57,7 +60,7 @@ final class RevisionInlineScript extends AbstractHelper
             $src = $this->minify->addRevision($src);
         }
 
-        $this->getView()->inlineScript()->appendFile(
+        $this->renderer->inlineScript()->appendFile(
             $this->getUrl($src, $absolute, $pathPrefix),
             $type,
             $attrs,
@@ -71,6 +74,7 @@ final class RevisionInlineScript extends AbstractHelper
      * @phpstan-param array<string, string> $attrs
      *
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function prependFile(
         string $src,
@@ -84,7 +88,7 @@ final class RevisionInlineScript extends AbstractHelper
             $src = $this->minify->addRevision($src);
         }
 
-        $this->getView()->inlineScript()->prependFile(
+        $this->renderer->inlineScript()->prependFile(
             $this->getUrl($src, $absolute, $pathPrefix),
             $type,
             $attrs,

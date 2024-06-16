@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -41,6 +42,9 @@ final class RevisionHeadLinkFactory implements FactoryInterface
         $requestedName,
         array | null $options = null,
     ): RevisionHeadLink {
-        return new RevisionHeadLink($container->get(MinifyInterface::class));
+        return new RevisionHeadLink(
+            $container->get(MinifyInterface::class),
+            $container->get(PhpRenderer::class),
+        );
     }
 }

@@ -13,18 +13,17 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
+use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Helper\Placeholder\Container\AbstractStandalone;
 use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
-use ReflectionProperty;
 
 final class RevisionInlineScriptTest extends TestCase
 {
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendPackage(): void
     {
@@ -64,23 +63,23 @@ final class RevisionInlineScriptTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
                     match ($matcher->numberOfInvocations()) {
-                        1, 4 => self::assertSame('baseUrl', $method),
                         3 => self::assertSame('serverUrl', $method),
                         2 => self::assertSame('inlineScript', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['abc.txt', false, false], $argv),
                         2 => self::assertSame([], $argv),
                         3 => self::assertSame(['/abc_42.txt'], $argv),
-                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => $inlineScript,
                         3 => 'https://www.test.de/abc_42.txt',
-                        4 => '',
+                        default => '',
                     };
                 },
             );
@@ -88,9 +87,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->appendPackage(
             $package,
@@ -102,8 +99,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendPackage2(): void
     {
@@ -136,23 +133,23 @@ final class RevisionInlineScriptTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
                     match ($matcher->numberOfInvocations()) {
-                        1, 4 => self::assertSame('baseUrl', $method),
                         3 => self::assertSame('serverUrl', $method),
                         2 => self::assertSame('headScript', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['abc.txt', false, false], $argv),
                         2 => self::assertSame([], $argv),
                         3 => self::assertSame(['/abc_42.txt'], $argv),
-                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => $inlineScript,
                         3 => 'https://www.test.de/abc_42.txt',
-                        4 => '',
+                        default => '',
                     };
                 },
             );
@@ -160,9 +157,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->appendPackage(
             $package,
@@ -174,8 +169,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendPackage3(): void
     {
@@ -208,23 +203,23 @@ final class RevisionInlineScriptTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
                     match ($matcher->numberOfInvocations()) {
-                        1, 4 => self::assertSame('baseUrl', $method),
                         3 => self::assertSame('serverUrl', $method),
                         2 => self::assertSame('headScript', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['abc.txt', false, false], $argv),
                         2 => self::assertSame([], $argv),
                         3 => self::assertSame(['/abc_42.txt'], $argv),
-                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => $inlineScript,
                         3 => 'https://www.test.de/abc_42.txt',
-                        4 => '',
+                        default => '',
                     };
                 },
             );
@@ -232,9 +227,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->appendPackage(
             $package,
@@ -246,8 +239,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendPackage4(): void
     {
@@ -280,23 +273,23 @@ final class RevisionInlineScriptTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
                     match ($matcher->numberOfInvocations()) {
-                        1, 4 => self::assertSame('baseUrl', $method),
                         3 => self::assertSame('serverUrl', $method),
                         2 => self::assertSame('headScript', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['abc.txt', false, false], $argv),
                         2 => self::assertSame([], $argv),
                         3 => self::assertSame(['/abc_42.txt'], $argv),
-                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => $inlineScript,
                         3 => 'https://www.test.de/abc_42.txt',
-                        4 => '',
+                        default => '',
                     };
                 },
             );
@@ -304,9 +297,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->appendPackage(
             $package,
@@ -318,8 +309,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendFile(): RevisionInlineScript
     {
@@ -359,9 +350,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->appendFile(
             $href,
@@ -375,8 +364,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendFile2(): RevisionInlineScript
     {
@@ -412,9 +401,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->appendFile(
             $href,
@@ -431,8 +418,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependPackage(): void
     {
@@ -469,23 +456,23 @@ final class RevisionInlineScriptTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher, $inlineScript): string | AbstractStandalone {
                     match ($matcher->numberOfInvocations()) {
-                        1, 4 => self::assertSame('baseUrl', $method),
                         3 => self::assertSame('serverUrl', $method),
                         2 => self::assertSame('inlineScript', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['bcd.txt', false, false], $argv),
                         2 => self::assertSame([], $argv),
                         3 => self::assertSame(['/abc_42.txt'], $argv),
-                        4 => self::assertSame(['abc.txt', false, false], $argv),
+                        default => self::assertSame(['abc.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => $inlineScript,
                         3 => 'https://www.test.de/abc_42.txt',
-                        4 => '',
+                        default => '',
                     };
                 },
             );
@@ -493,9 +480,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->prependPackage($package);
 
@@ -503,8 +488,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependPackage2(): void
     {
@@ -531,9 +516,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->prependPackage($package);
 
@@ -541,8 +524,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependPackage3(): void
     {
@@ -569,9 +552,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->prependPackage($package);
 
@@ -579,8 +560,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependPackage4(): void
     {
@@ -607,9 +588,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->prependPackage($package);
 
@@ -617,8 +596,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependFile(): void
     {
@@ -655,9 +634,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->prependFile($href);
 
@@ -665,8 +642,8 @@ final class RevisionInlineScriptTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependFile2(): void
     {
@@ -702,9 +679,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->prependFile(
             $href,
@@ -718,10 +693,7 @@ final class RevisionInlineScriptTest extends TestCase
         self::assertSame($object, $return);
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage(): void
     {
         $package = 'test-package';
@@ -759,9 +731,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->listPackage($package);
 
@@ -771,10 +741,7 @@ final class RevisionInlineScriptTest extends TestCase
         );
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage2(): void
     {
         $package = 'test-package';
@@ -800,19 +767,14 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->listPackage($package);
 
         self::assertSame([], $return);
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage3(): void
     {
         $package = 'test-package';
@@ -838,19 +800,14 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->listPackage($package);
 
         self::assertSame([], $return);
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage4(): void
     {
         $package = 'test-package';
@@ -876,9 +833,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionInlineScript($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionInlineScript($minify, $renderer);
 
         $return = $object->listPackage($package);
 

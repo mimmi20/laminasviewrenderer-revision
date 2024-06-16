@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
+use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Renderer\RendererInterface as Renderer;
 use Mimmi20\LaminasView\Revision\Minify;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
@@ -47,6 +48,7 @@ trait PackageTrait
      * @phpstan-param array<string, string> $attrs
      *
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function appendPackage(
         string $package,
@@ -67,7 +69,7 @@ trait PackageTrait
                 continue;
             }
 
-            $uri = $this->getView()->baseUrl($file, false, $clearQuery);
+            $uri = $this->renderer->baseUrl($file, false, $clearQuery);
 
             if ($uri === '' || $uri === '/') {
                 continue;
@@ -97,6 +99,7 @@ trait PackageTrait
      * @phpstan-param array<string, string> $attrs
      *
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function prependPackage(
         string $package,
@@ -117,7 +120,7 @@ trait PackageTrait
                 continue;
             }
 
-            $uri = $this->getView()->baseUrl($file, false, $clearQuery);
+            $uri = $this->renderer->baseUrl($file, false, $clearQuery);
 
             if ($uri === '' || $uri === '/') {
                 continue;
@@ -172,7 +175,7 @@ trait PackageTrait
                 continue;
             }
 
-            $uri = $this->getView()->baseUrl($file, false, $clearQuery);
+            $uri = $this->renderer->baseUrl($file, false, $clearQuery);
 
             if ($uri === '' || $uri === '/') {
                 continue;

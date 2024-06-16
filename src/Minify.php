@@ -77,7 +77,9 @@ final class Minify implements MinifyInterface
         $decoded = json_decode($content, true, 512, JSON_THROW_ON_ERROR);
         assert(is_array($decoded));
 
-        $this->groups = $decoded['assets'] ?? [];
+        if (array_key_exists('assets', $decoded) && is_array($decoded['assets'])) {
+            $this->groups = $decoded['assets'];
+        }
     }
 
     /**
