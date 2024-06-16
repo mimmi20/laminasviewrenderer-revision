@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
+use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
@@ -34,13 +35,30 @@ final class RevisionInlineScriptFactoryTest extends TestCase
      */
     public function testInvoke(): void
     {
-        $minify = $this->createMock(MinifyInterface::class);
+        $minify   = $this->createMock(MinifyInterface::class);
+        $renderer = $this->createMock(PhpRenderer::class);
 
         $container = $this->createMock(ContainerInterface::class);
-        $container->expects(self::once())
+        $matcher   = self::exactly(2);
+        $container->expects($matcher)
             ->method('get')
-            ->with(MinifyInterface::class)
-            ->willReturn($minify);
+            ->willReturnCallback(
+                static function (string $name, array | null $options = null) use ($matcher, $minify, $renderer): mixed {
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(MinifyInterface::class, $name),
+                        default => self::assertSame(PhpRenderer::class, $name),
+                    };
+
+                    self::assertNull($options);
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => $minify,
+                        default => $renderer,
+                    };
+                },
+            );
+        $container->expects(self::never())
+            ->method('has');
 
         self::assertInstanceOf(RevisionInlineScript::class, ($this->object)($container, 'test'));
     }

@@ -13,7 +13,9 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
+use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Helper\AbstractHelper;
+use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\Minify;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 
@@ -33,7 +35,7 @@ final class RevisionHeadLink extends AbstractHelper
     use GetUrlTrait;
 
     /** @throws void */
-    public function __construct(private readonly MinifyInterface $minify)
+    public function __construct(private readonly MinifyInterface $minify, private readonly PhpRenderer $renderer)
     {
         // nothing to do
     }
@@ -48,6 +50,7 @@ final class RevisionHeadLink extends AbstractHelper
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      *
      * @api
      */
@@ -71,7 +74,7 @@ final class RevisionHeadLink extends AbstractHelper
                 continue;
             }
 
-            $uri = $this->getView()->baseUrl($file, false, $clearQuery);
+            $uri = $this->renderer->baseUrl($file, false, $clearQuery);
 
             if ($uri === '' || $uri === '/') {
                 continue;
@@ -105,6 +108,7 @@ final class RevisionHeadLink extends AbstractHelper
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      *
      * @api
      */
@@ -128,7 +132,7 @@ final class RevisionHeadLink extends AbstractHelper
                 continue;
             }
 
-            $uri = $this->getView()->baseUrl($file, false, $clearQuery);
+            $uri = $this->renderer->baseUrl($file, false, $clearQuery);
 
             if ($uri === '' || $uri === '/') {
                 continue;
@@ -190,7 +194,7 @@ final class RevisionHeadLink extends AbstractHelper
                 continue;
             }
 
-            $uri = $this->getView()->baseUrl($file, false, $clearQuery);
+            $uri = $this->renderer->baseUrl($file, false, $clearQuery);
 
             if ($uri === '' || $uri === '/') {
                 continue;
@@ -218,6 +222,7 @@ final class RevisionHeadLink extends AbstractHelper
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function appendStylesheet(
         string $href,
@@ -234,7 +239,7 @@ final class RevisionHeadLink extends AbstractHelper
 
         unset($extras['rel']);
 
-        $this->getView()->headLink()->appendStylesheet(
+        $this->renderer->headLink()->appendStylesheet(
             $this->getUrl($href, $absolute, $pathPrefix),
             $media,
             $conditionalStylesheet,
@@ -251,6 +256,7 @@ final class RevisionHeadLink extends AbstractHelper
      * @phpstan-param array<string, string> $extras
      *
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function prependStylesheet(
         string $href,
@@ -267,7 +273,7 @@ final class RevisionHeadLink extends AbstractHelper
 
         unset($extras['rel']);
 
-        $this->getView()->headLink()->prependStylesheet(
+        $this->renderer->headLink()->prependStylesheet(
             $this->getUrl($href, $absolute, $pathPrefix),
             $media,
             $conditionalStylesheet,

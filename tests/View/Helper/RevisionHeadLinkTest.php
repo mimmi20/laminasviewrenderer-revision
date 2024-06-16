@@ -13,18 +13,17 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
+use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Helper\Placeholder\Container\AbstractStandalone;
 use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
 use PHPUnit\Framework\TestCase;
-use ReflectionException;
-use ReflectionProperty;
 
 final class RevisionHeadLinkTest extends TestCase
 {
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendPackage(): void
     {
@@ -61,23 +60,23 @@ final class RevisionHeadLinkTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher, $headLink): string | AbstractStandalone {
                     match ($matcher->numberOfInvocations()) {
-                        1, 4 => self::assertSame('baseUrl', $method),
                         3 => self::assertSame('serverUrl', $method),
                         2 => self::assertSame('headLink', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['abc.txt', false, false], $argv),
                         2 => self::assertSame([], $argv),
                         3 => self::assertSame(['/abc_42.txt'], $argv),
-                        4 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => $headLink,
                         3 => 'https://www.test.de/abc_42.txt',
-                        4 => '',
+                        default => '',
                     };
                 },
             );
@@ -85,9 +84,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->appendPackage($package, 'screen', '!IE', ['rel' => 'prev']);
 
@@ -95,8 +92,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendPackage2(): void
     {
@@ -123,9 +120,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->appendPackage($package, 'screen', '!IE', ['rel' => 'prev', 'async' => null]);
 
@@ -133,8 +128,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendPackage3(): void
     {
@@ -161,9 +156,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->appendPackage($package, 'screen', '!IE', ['rel' => 'prev', 'async' => null]);
 
@@ -171,8 +164,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendPackage4(): void
     {
@@ -199,9 +192,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->appendPackage($package, 'screen', '!IE', ['rel' => 'prev', 'async' => null]);
 
@@ -209,8 +200,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendStylesheet(): void
     {
@@ -247,9 +238,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->appendStylesheet($href, 'screen', '!IE', ['rel' => 'prev']);
 
@@ -257,8 +246,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testAppendStylesheet2(): void
     {
@@ -291,9 +280,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->appendStylesheet(
             $href,
@@ -309,8 +296,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependPackage(): void
     {
@@ -347,23 +334,23 @@ final class RevisionHeadLinkTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher, $headLink): string | AbstractStandalone {
                     match ($matcher->numberOfInvocations()) {
-                        1, 4 => self::assertSame('baseUrl', $method),
-                        3 => self::assertSame('serverUrl', $method),
                         2 => self::assertSame('headLink', $method),
+                        3 => self::assertSame('serverUrl', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
-                        4 => self::assertSame(['abc.txt', false, false], $argv),
+                        1 => self::assertSame(['bcd.txt', false, false], $argv),
                         2 => self::assertSame([], $argv),
                         3 => self::assertSame(['/abc_42.txt'], $argv),
-                        1 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['abc.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => $headLink,
                         3 => 'https://www.test.de/abc_42.txt',
-                        4 => '',
+                        default => '',
                     };
                 },
             );
@@ -371,9 +358,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->prependPackage($package);
 
@@ -381,8 +366,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependPackage2(): void
     {
@@ -409,9 +394,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->prependPackage($package);
 
@@ -419,8 +402,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependPackage3(): void
     {
@@ -447,9 +430,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->prependPackage($package);
 
@@ -457,8 +438,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependPackage4(): void
     {
@@ -485,9 +466,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->prependPackage($package);
 
@@ -495,8 +474,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependStylesheet(): void
     {
@@ -533,9 +512,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->prependStylesheet($href);
 
@@ -543,8 +520,8 @@ final class RevisionHeadLinkTest extends TestCase
     }
 
     /**
-     * @throws ReflectionException
      * @throws InvalidArgumentException
+     * @throws BadMethodCallException
      */
     public function testPrependStylesheet2(): void
     {
@@ -577,9 +554,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->prependStylesheet(
             $href,
@@ -594,10 +569,7 @@ final class RevisionHeadLinkTest extends TestCase
         self::assertSame($object, $return);
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage(): void
     {
         $package = 'test-package';
@@ -627,20 +599,20 @@ final class RevisionHeadLinkTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher): string {
                     match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('baseUrl', $method),
                         2 => self::assertSame('serverUrl', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['abc.txt', false, false], $argv),
                         2 => self::assertSame(['/abc_42.txt'], $argv),
-                        3 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => 'https://www.test.de/abc_42.txt',
-                        3 => '',
+                        default => '',
                     };
                 },
             );
@@ -648,9 +620,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->listPackage($package);
 
@@ -660,10 +630,7 @@ final class RevisionHeadLinkTest extends TestCase
         );
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage2(): void
     {
         $package = 'test-package';
@@ -689,19 +656,14 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->listPackage($package);
 
         self::assertSame([], $return);
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage3(): void
     {
         $package = 'test-package';
@@ -727,19 +689,14 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->listPackage($package);
 
         self::assertSame([], $return);
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage4(): void
     {
         $package = 'test-package';
@@ -765,19 +722,14 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->listPackage($package);
 
         self::assertSame([], $return);
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage5(): void
     {
         $package = 'test-package';
@@ -807,20 +759,20 @@ final class RevisionHeadLinkTest extends TestCase
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher): string {
                     match ($matcher->numberOfInvocations()) {
-                        1, 3 => self::assertSame('baseUrl', $method),
                         2 => self::assertSame('serverUrl', $method),
+                        default => self::assertSame('baseUrl', $method),
                     };
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['abc.txt', false, false], $argv),
                         2 => self::assertSame(['/abc_42.txt'], $argv),
-                        3 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
                         2 => 'https://www.test.de/abc_42.txt',
-                        3 => '',
+                        default => '',
                     };
                 },
             );
@@ -828,9 +780,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->listPackage($package, 'print');
 
@@ -840,10 +790,7 @@ final class RevisionHeadLinkTest extends TestCase
         );
     }
 
-    /**
-     * @throws ReflectionException
-     * @throws InvalidArgumentException
-     */
+    /** @throws InvalidArgumentException */
     public function testListPackage6(): void
     {
         $package = 'test-package';
@@ -872,18 +819,16 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->willReturnCallback(
                 static function (string $method, array $argv) use ($matcher): string {
-                    match ($matcher->numberOfInvocations()) {
-                        1, 2 => self::assertSame('baseUrl', $method),
-                    };
+                    self::assertSame('baseUrl', $method);
 
                     match ($matcher->numberOfInvocations()) {
                         1 => self::assertSame(['abc.txt', false, false], $argv),
-                        2 => self::assertSame(['bcd.txt', false, false], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
                     };
 
                     return match ($matcher->numberOfInvocations()) {
                         1 => '/abc.txt',
-                        2 => '',
+                        default => '',
                     };
                 },
             );
@@ -891,9 +836,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->expects(self::never())
             ->method('plugin');
 
-        $object = new RevisionHeadLink($minify);
-        $view   = new ReflectionProperty($object, 'view');
-        $view->setValue($object, $renderer);
+        $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->listPackage($package, 'print', false, [], false);
 

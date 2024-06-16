@@ -29,7 +29,7 @@ trait GetUrlTrait
         }
 
         if ($absolute) {
-            return $this->getView()->serverUrl($pathPrefix . $src);
+            return $this->renderer->serverUrl($pathPrefix . $src);
         }
 
         if ($uri->isAbsolute()) {
