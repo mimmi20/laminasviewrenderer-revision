@@ -15,6 +15,7 @@ namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -25,6 +26,7 @@ final class RevisionInlineScriptFactoryTest extends TestCase
     private RevisionInlineScriptFactory $object;
 
     /** @throws void */
+    #[Override]
     protected function setUp(): void
     {
         $this->object = new RevisionInlineScriptFactory();

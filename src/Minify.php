@@ -14,6 +14,7 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision;
 
 use JsonException;
+use Override;
 use SplFileInfo;
 
 use function array_key_exists;
@@ -37,12 +38,12 @@ final class Minify implements MinifyInterface
     /**
      * Standardrevision
      */
-    public const DEFAULT_REVISION = '1';
+    public const string DEFAULT_REVISION = '1';
 
     /**
      * Postfix
      */
-    private const REVISION_STRING = '__%s';
+    private const string REVISION_STRING = '__%s';
 
     /**
      * @var array<array<array<string>>>|array<array<string>>
@@ -88,6 +89,7 @@ final class Minify implements MinifyInterface
      *
      * @throws void
      */
+    #[Override]
     public function hasPackage(string $package): bool
     {
         return array_key_exists($package, $this->groups);
@@ -102,6 +104,7 @@ final class Minify implements MinifyInterface
      *
      * @throws void
      */
+    #[Override]
     public function getPackageFiles(string $package): array
     {
         if (!$this->isValid($package)) {
@@ -130,6 +133,7 @@ final class Minify implements MinifyInterface
     }
 
     /** @throws void */
+    #[Override]
     public function isEnabled(): bool
     {
         return $this->enabled;
@@ -140,6 +144,7 @@ final class Minify implements MinifyInterface
      *
      * @throws void
      */
+    #[Override]
     public function isItemOkToAddRevision(string $type, string $href): bool
     {
         if (!$href) {
@@ -154,6 +159,7 @@ final class Minify implements MinifyInterface
     }
 
     /** @throws void */
+    #[Override]
     public function addRevision(string $resource): string
     {
         $fileInfo = new SplFileInfo($resource);
@@ -167,6 +173,7 @@ final class Minify implements MinifyInterface
      *
      * @throws void
      */
+    #[Override]
     public function getRevisionString(): string
     {
         return sprintf(self::REVISION_STRING, $this->getRevision());
@@ -177,6 +184,7 @@ final class Minify implements MinifyInterface
      *
      * @throws void
      */
+    #[Override]
     public function getRevision(): string | null
     {
         return $this->revision;

@@ -15,6 +15,7 @@ namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Http\PhpEnvironment\Request;
 use Laminas\Uri\Http;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -25,6 +26,7 @@ final class BaseUrlFactoryTest extends TestCase
     private BaseUrlFactory $object;
 
     /** @throws void */
+    #[Override]
     protected function setUp(): void
     {
         $this->object = new BaseUrlFactory();

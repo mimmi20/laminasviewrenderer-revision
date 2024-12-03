@@ -14,6 +14,7 @@ declare(strict_types = 1);
 namespace Mimmi20\LaminasView\Revision;
 
 use Laminas\ModuleManager\Feature\ConfigProviderInterface;
+use Override;
 
 final class Module implements ConfigProviderInterface
 {
@@ -23,6 +24,7 @@ final class Module implements ConfigProviderInterface
      *
      * @throws void
      */
+    #[Override]
     public function getConfig(): array
     {
         $provider = new ConfigProvider();
