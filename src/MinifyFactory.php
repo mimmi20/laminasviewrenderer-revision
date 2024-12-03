@@ -16,6 +16,7 @@ namespace Mimmi20\LaminasView\Revision;
 use JsonException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Mimmi20\LaminasView\Revision\Config\MinifyConfigInterface;
+use Override;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 
@@ -34,6 +35,7 @@ final class MinifyFactory implements FactoryInterface
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
      * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
+    #[Override]
     public function __invoke(ContainerInterface $container, $requestedName, array | null $options = null): Minify
     {
         $config = $container->get(MinifyConfigInterface::class);

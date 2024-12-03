@@ -18,16 +18,16 @@ namespace Mimmi20\LaminasView\Revision;
  */
 interface MinifyInterface
 {
-    public const FILETYPE_JS = 'js';
+    public const string FILETYPE_JS = 'js';
 
-    public const FILETYPE_CSS = 'css';
+    public const string FILETYPE_CSS = 'css';
 
     /**
      * Standardrevision
      *
      * @api
      */
-    public const DEFAULT_REVISION = '1';
+    public const string DEFAULT_REVISION = '1';
 
     /**
      * Test for package of given name is known, might by invalid.

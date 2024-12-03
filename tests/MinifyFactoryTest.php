@@ -15,6 +15,7 @@ namespace Mimmi20\LaminasView\Revision;
 
 use JsonException;
 use Mimmi20\LaminasView\Revision\Config\MinifyConfigInterface;
+use Override;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -24,6 +25,7 @@ final class MinifyFactoryTest extends TestCase
     private MinifyFactory $object;
 
     /** @throws void */
+    #[Override]
     protected function setUp(): void
     {
         $this->object = new MinifyFactory();
