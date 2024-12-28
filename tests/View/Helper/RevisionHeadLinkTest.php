@@ -261,7 +261,13 @@ final class RevisionHeadLinkTest extends TestCase
 
         $object = new RevisionHeadLink($minify, $renderer);
 
-        $return = $object->appendPackage($package, 'screen', '!IE', ['rel' => 'prev'], addRevision: false);
+        $return = $object->appendPackage(
+            $package,
+            'screen',
+            '!IE',
+            ['rel' => 'prev'],
+            addRevision: false,
+        );
 
         self::assertSame($object, $return);
     }
