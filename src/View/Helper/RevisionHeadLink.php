@@ -63,6 +63,7 @@ final class RevisionHeadLink extends AbstractHelper
         bool $absolute = true,
         string $pathPrefix = '',
         bool $clearQuery = false,
+        bool $addRevision = true,
     ): self {
         $files = $this->minify->getPackageFiles($package);
 
@@ -81,18 +82,18 @@ final class RevisionHeadLink extends AbstractHelper
                 continue;
             }
 
-            if ($this->minify->isItemOkToAddRevision(Minify::FILETYPE_CSS, $uri)) {
+            if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_CSS, $uri)) {
                 $uri = $this->minify->addRevision($uri);
             }
 
             $this->appendStylesheet(
-                $uri,
-                $media,
-                $conditionalStylesheet,
-                $extras,
-                $absolute,
-                $pathPrefix,
-                false,
+                href: $uri,
+                media: $media,
+                conditionalStylesheet: $conditionalStylesheet,
+                extras: $extras,
+                absolute: $absolute,
+                pathPrefix: $pathPrefix,
+                addRevision: false,
             );
         }
 
@@ -121,6 +122,7 @@ final class RevisionHeadLink extends AbstractHelper
         bool $absolute = true,
         string $pathPrefix = '',
         bool $clearQuery = false,
+        bool $addRevision = true,
     ): self {
         $files = $this->minify->getPackageFiles($package);
 
@@ -139,18 +141,18 @@ final class RevisionHeadLink extends AbstractHelper
                 continue;
             }
 
-            if ($this->minify->isItemOkToAddRevision(Minify::FILETYPE_CSS, $uri)) {
+            if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_CSS, $uri)) {
                 $uri = $this->minify->addRevision($uri);
             }
 
             $this->prependStylesheet(
-                $uri,
-                $media,
-                $conditionalStylesheet,
-                $extras,
-                $absolute,
-                $pathPrefix,
-                false,
+                href: $uri,
+                media: $media,
+                conditionalStylesheet: $conditionalStylesheet,
+                extras: $extras,
+                absolute: $absolute,
+                pathPrefix: $pathPrefix,
+                addRevision: false,
             );
         }
 
@@ -181,6 +183,7 @@ final class RevisionHeadLink extends AbstractHelper
         bool $absolute = true,
         string $pathPrefix = '',
         bool $clearQuery = false,
+        bool $addRevision = true,
     ): array {
         $files = $this->minify->getPackageFiles($package);
 
@@ -201,7 +204,7 @@ final class RevisionHeadLink extends AbstractHelper
                 continue;
             }
 
-            if ($this->minify->isItemOkToAddRevision(Minify::FILETYPE_CSS, $uri)) {
+            if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_CSS, $uri)) {
                 $uri = $this->minify->addRevision($uri);
             }
 
