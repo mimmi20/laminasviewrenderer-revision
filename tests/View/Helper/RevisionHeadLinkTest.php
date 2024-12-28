@@ -204,6 +204,72 @@ final class RevisionHeadLinkTest extends TestCase
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
      */
+    public function testAppendPackage5(): void
+    {
+        $package = 'test-package';
+
+        $minify = $this->createMock(MinifyInterface::class);
+        $minify
+            ->expects(self::once())
+            ->method('getPackageFiles')
+            ->with($package)
+            ->willReturn(['files' => ['abc.txt', '', 'bcd.txt']]);
+        $minify
+            ->expects(self::never())
+            ->method('isItemOkToAddRevision');
+        $minify
+            ->expects(self::never())
+            ->method('addRevision');
+
+        $headLink = $this->createMock(AbstractStandalone::class);
+        $headLink
+            ->expects(self::once())
+            ->method('__call')
+            ->with('appendStylesheet', ['https://www.test.de/abc_42.txt', 'screen', '!IE', []]);
+
+        $renderer = $this->createMock(PhpRenderer::class);
+        $matcher  = self::exactly(4);
+        $renderer
+            ->expects($matcher)
+            ->method('__call')
+            ->willReturnCallback(
+                static function (string $method, array $argv) use ($matcher, $headLink): string | AbstractStandalone {
+                    match ($matcher->numberOfInvocations()) {
+                        3 => self::assertSame('serverUrl', $method),
+                        2 => self::assertSame('headLink', $method),
+                        default => self::assertSame('baseUrl', $method),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(['abc.txt', false, false], $argv),
+                        2 => self::assertSame([], $argv),
+                        3 => self::assertSame(['/abc.txt'], $argv),
+                        default => self::assertSame(['bcd.txt', false, false], $argv),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => '/abc.txt',
+                        2 => $headLink,
+                        3 => 'https://www.test.de/abc_42.txt',
+                        default => '',
+                    };
+                },
+            );
+        $renderer
+            ->expects(self::never())
+            ->method('plugin');
+
+        $object = new RevisionHeadLink($minify, $renderer);
+
+        $return = $object->appendPackage($package, 'screen', '!IE', ['rel' => 'prev'], addRevision: false);
+
+        self::assertSame($object, $return);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws BadMethodCallException
+     */
     public function testAppendStylesheet(): void
     {
         $href = 'https://www.test.de/abc.txt';
@@ -470,6 +536,72 @@ final class RevisionHeadLinkTest extends TestCase
         $object = new RevisionHeadLink($minify, $renderer);
 
         $return = $object->prependPackage($package);
+
+        self::assertSame($object, $return);
+    }
+
+    /**
+     * @throws InvalidArgumentException
+     * @throws BadMethodCallException
+     */
+    public function testPrependPackage5(): void
+    {
+        $package = 'test-package';
+
+        $minify = $this->createMock(MinifyInterface::class);
+        $minify
+            ->expects(self::once())
+            ->method('getPackageFiles')
+            ->with($package)
+            ->willReturn(['files' => ['abc.txt', '', 'bcd.txt']]);
+        $minify
+            ->expects(self::never())
+            ->method('isItemOkToAddRevision');
+        $minify
+            ->expects(self::never())
+            ->method('addRevision');
+
+        $headLink = $this->createMock(AbstractStandalone::class);
+        $headLink
+            ->expects(self::once())
+            ->method('__call')
+            ->with('prependStylesheet', ['https://www.test.de/abc_42.txt', 'screen', false, []]);
+
+        $renderer = $this->createMock(PhpRenderer::class);
+        $matcher  = self::exactly(4);
+        $renderer
+            ->expects($matcher)
+            ->method('__call')
+            ->willReturnCallback(
+                static function (string $method, array $argv) use ($matcher, $headLink): string | AbstractStandalone {
+                    match ($matcher->numberOfInvocations()) {
+                        2 => self::assertSame('headLink', $method),
+                        3 => self::assertSame('serverUrl', $method),
+                        default => self::assertSame('baseUrl', $method),
+                    };
+
+                    match ($matcher->numberOfInvocations()) {
+                        1 => self::assertSame(['bcd.txt', false, false], $argv),
+                        2 => self::assertSame([], $argv),
+                        3 => self::assertSame(['/abc.txt'], $argv),
+                        default => self::assertSame(['abc.txt', false, false], $argv),
+                    };
+
+                    return match ($matcher->numberOfInvocations()) {
+                        1 => '/abc.txt',
+                        2 => $headLink,
+                        3 => 'https://www.test.de/abc_42.txt',
+                        default => '',
+                    };
+                },
+            );
+        $renderer
+            ->expects(self::never())
+            ->method('plugin');
+
+        $object = new RevisionHeadLink($minify, $renderer);
+
+        $return = $object->prependPackage($package, addRevision: false);
 
         self::assertSame($object, $return);
     }
