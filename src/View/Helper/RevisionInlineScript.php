@@ -62,9 +62,9 @@ final class RevisionInlineScript extends AbstractHelper
         }
 
         $this->renderer->inlineScript()->appendFile(
-            $this->getUrl($src, $absolute, $pathPrefix),
-            $type,
-            $attrs,
+            src: $this->getUrl($src, $absolute, $pathPrefix),
+            type: $type,
+            attrs: $attrs,
         );
 
         return $this;
@@ -90,9 +90,9 @@ final class RevisionInlineScript extends AbstractHelper
         }
 
         $this->renderer->inlineScript()->prependFile(
-            $this->getUrl($src, $absolute, $pathPrefix),
-            $type,
-            $attrs,
+            src: $this->getUrl($src, $absolute, $pathPrefix),
+            type: $type,
+            attrs: $attrs,
         );
 
         return $this;

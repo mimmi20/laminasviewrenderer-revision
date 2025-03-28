@@ -16,6 +16,8 @@ namespace Mimmi20\LaminasView\Revision\View\Helper;
 use Laminas\Http\PhpEnvironment\Request;
 use Laminas\Uri\Http;
 use Override;
+use PHPUnit\Event\NoPreviousThrowableException;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -35,6 +37,9 @@ final class BaseUrlFactoryTest extends TestCase
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvokeHasRequest(): void
     {
@@ -61,6 +66,9 @@ final class BaseUrlFactoryTest extends TestCase
     /**
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvokeHasNoRequest(): void
     {

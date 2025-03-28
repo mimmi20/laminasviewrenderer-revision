@@ -111,6 +111,12 @@ parameters:
     - '~types as the only types passed to this method~'
 #    - '~expects array<string, string>, array<string, string\|null> given~'
 
+    -
+      identifier: property.uninitialized
+      paths:
+        - tests/*/*Test.php
+        - tests/*Test.php
+
   stubFiles:
     - stubs/psr/container/ContainerExceptionInterface.stub
     - stubs/psr/container/NotFoundExceptionInterface.stub

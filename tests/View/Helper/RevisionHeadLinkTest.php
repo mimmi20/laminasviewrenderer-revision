@@ -18,6 +18,8 @@ use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Helper\Placeholder\Container\AbstractStandalone;
 use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
+use PHPUnit\Event\NoPreviousThrowableException;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 final class RevisionHeadLinkTest extends TestCase
@@ -25,6 +27,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage(): void
     {
@@ -51,7 +56,10 @@ final class RevisionHeadLinkTest extends TestCase
         $headLink
             ->expects(self::once())
             ->method('__call')
-            ->with('appendStylesheet', ['https://www.test.de/abc_42.txt', 'screen', '!IE', []]);
+            ->with(
+                'appendStylesheet',
+                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $matcher  = self::exactly(4);
@@ -95,6 +103,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage2(): void
     {
@@ -131,6 +142,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage3(): void
     {
@@ -167,6 +181,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage4(): void
     {
@@ -203,6 +220,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage5(): void
     {
@@ -225,7 +245,10 @@ final class RevisionHeadLinkTest extends TestCase
         $headLink
             ->expects(self::once())
             ->method('__call')
-            ->with('appendStylesheet', ['https://www.test.de/abc_42.txt', 'screen', '!IE', []]);
+            ->with(
+                'appendStylesheet',
+                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $matcher  = self::exactly(4);
@@ -275,6 +298,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendStylesheet(): void
     {
@@ -299,7 +325,10 @@ final class RevisionHeadLinkTest extends TestCase
         $headLink
             ->expects(self::once())
             ->method('__call')
-            ->with('appendStylesheet', ['https://www.test.de/abc_42.txt', 'screen', '!IE', []]);
+            ->with(
+                'appendStylesheet',
+                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $renderer
@@ -321,6 +350,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendStylesheet2(): void
     {
@@ -341,7 +373,10 @@ final class RevisionHeadLinkTest extends TestCase
         $headLink
             ->expects(self::once())
             ->method('__call')
-            ->with('appendStylesheet', ['/test/abc.txt', 'screen', '!IE', []]);
+            ->with(
+                'appendStylesheet',
+                ['href' => '/test/abc.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $renderer
@@ -371,6 +406,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage(): void
     {
@@ -397,7 +435,10 @@ final class RevisionHeadLinkTest extends TestCase
         $headLink
             ->expects(self::once())
             ->method('__call')
-            ->with('prependStylesheet', ['https://www.test.de/abc_42.txt', 'screen', false, []]);
+            ->with(
+                'prependStylesheet',
+                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => false, 'extras' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $matcher  = self::exactly(4);
@@ -441,6 +482,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage2(): void
     {
@@ -477,6 +521,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage3(): void
     {
@@ -513,6 +560,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage4(): void
     {
@@ -549,6 +599,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage5(): void
     {
@@ -571,7 +624,10 @@ final class RevisionHeadLinkTest extends TestCase
         $headLink
             ->expects(self::once())
             ->method('__call')
-            ->with('prependStylesheet', ['https://www.test.de/abc_42.txt', 'screen', false, []]);
+            ->with(
+                'prependStylesheet',
+                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => false, 'extras' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $matcher  = self::exactly(4);
@@ -615,6 +671,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependStylesheet(): void
     {
@@ -639,7 +698,10 @@ final class RevisionHeadLinkTest extends TestCase
         $headLink
             ->expects(self::once())
             ->method('__call')
-            ->with('prependStylesheet', ['https://www.test.de/abc_42.txt', 'screen', false, []]);
+            ->with(
+                'prependStylesheet',
+                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => false, 'extras' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $renderer
@@ -661,6 +723,9 @@ final class RevisionHeadLinkTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependStylesheet2(): void
     {
@@ -681,7 +746,10 @@ final class RevisionHeadLinkTest extends TestCase
         $headLink
             ->expects(self::once())
             ->method('__call')
-            ->with('prependStylesheet', ['/test/abc.txt', 'screen', '!IE', []]);
+            ->with(
+                'prependStylesheet',
+                ['href' => '/test/abc.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $renderer
@@ -708,7 +776,12 @@ final class RevisionHeadLinkTest extends TestCase
         self::assertSame($object, $return);
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage(): void
     {
         $package = 'test-package';
@@ -769,7 +842,12 @@ final class RevisionHeadLinkTest extends TestCase
         );
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage2(): void
     {
         $package = 'test-package';
@@ -802,7 +880,12 @@ final class RevisionHeadLinkTest extends TestCase
         self::assertSame([], $return);
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage3(): void
     {
         $package = 'test-package';
@@ -835,7 +918,12 @@ final class RevisionHeadLinkTest extends TestCase
         self::assertSame([], $return);
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage4(): void
     {
         $package = 'test-package';
@@ -868,7 +956,12 @@ final class RevisionHeadLinkTest extends TestCase
         self::assertSame([], $return);
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage5(): void
     {
         $package = 'test-package';
@@ -929,7 +1022,12 @@ final class RevisionHeadLinkTest extends TestCase
         );
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage6(): void
     {
         $package = 'test-package';
