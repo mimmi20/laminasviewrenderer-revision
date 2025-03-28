@@ -58,6 +58,7 @@ trait PackageTrait
         bool $absolute = true,
         string $pathPrefix = '',
         bool $clearQuery = false,
+        bool $addRevision = true,
     ): self {
         $files = $this->minify->getPackageFiles($package);
 
@@ -76,17 +77,17 @@ trait PackageTrait
                 continue;
             }
 
-            if ($this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $uri)) {
+            if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $uri)) {
                 $uri = $this->minify->addRevision($uri);
             }
 
             $this->appendFile(
-                $uri,
-                $type,
-                array_merge($files['attr'] ?? [], $attrs),
-                $absolute,
-                $pathPrefix,
-                false,
+                src: $uri,
+                type: $type,
+                attrs: array_merge($files['attr'] ?? [], $attrs),
+                absolute: $absolute,
+                pathPrefix: $pathPrefix,
+                addRevision: false,
             );
         }
 
@@ -109,6 +110,7 @@ trait PackageTrait
         bool $absolute = true,
         string $pathPrefix = '',
         bool $clearQuery = false,
+        bool $addRevision = true,
     ): self {
         $files = $this->minify->getPackageFiles($package);
 
@@ -127,17 +129,17 @@ trait PackageTrait
                 continue;
             }
 
-            if ($this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $uri)) {
+            if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $uri)) {
                 $uri = $this->minify->addRevision($uri);
             }
 
             $this->prependFile(
-                $uri,
-                $type,
-                array_merge($files['attr'] ?? [], $attrs),
-                $absolute,
-                $pathPrefix,
-                false,
+                src: $uri,
+                type: $type,
+                attrs: array_merge($files['attr'] ?? [], $attrs),
+                absolute: $absolute,
+                pathPrefix: $pathPrefix,
+                addRevision: false,
             );
         }
 
@@ -162,6 +164,7 @@ trait PackageTrait
         bool $absolute = true,
         string $pathPrefix = '',
         bool $clearQuery = false,
+        bool $addRevision = true,
     ): array {
         $files = $this->minify->getPackageFiles($package);
 
@@ -182,7 +185,7 @@ trait PackageTrait
                 continue;
             }
 
-            if ($this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $uri)) {
+            if ($addRevision && $this->minify->isItemOkToAddRevision(Minify::FILETYPE_JS, $uri)) {
                 $uri = $this->minify->addRevision($uri);
             }
 

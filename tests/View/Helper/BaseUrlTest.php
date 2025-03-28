@@ -15,6 +15,7 @@ namespace Mimmi20\LaminasView\Revision\View\Helper;
 
 use Laminas\Uri\Exception\InvalidArgumentException;
 use Laminas\Uri\Http;
+use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,8 @@ final class BaseUrlTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvokeWithoutHost(): void
     {
@@ -60,6 +63,9 @@ final class BaseUrlTest extends TestCase
     /**
      * @throws Exception
      * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvokeWithHost(): void
     {

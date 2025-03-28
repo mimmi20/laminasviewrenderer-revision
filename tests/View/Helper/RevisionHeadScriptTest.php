@@ -18,6 +18,8 @@ use Laminas\View\Exception\BadMethodCallException;
 use Laminas\View\Helper\Placeholder\Container\AbstractStandalone;
 use Laminas\View\Renderer\PhpRenderer;
 use Mimmi20\LaminasView\Revision\MinifyInterface;
+use PHPUnit\Event\NoPreviousThrowableException;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 
 final class RevisionHeadScriptTest extends TestCase
@@ -25,6 +27,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage(): void
     {
@@ -53,7 +58,7 @@ final class RevisionHeadScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'appendFile',
-                ['https://www.test.de/abc_42.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -102,6 +107,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage2(): void
     {
@@ -172,6 +180,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage3(): void
     {
@@ -242,6 +253,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendPackage4(): void
     {
@@ -312,6 +326,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendFile(): void
     {
@@ -338,7 +355,7 @@ final class RevisionHeadScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'appendFile',
-                ['https://www.test.de/abc_42.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -366,6 +383,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testAppendFile2(): RevisionHeadScript
     {
@@ -388,7 +408,7 @@ final class RevisionHeadScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'appendFile',
-                ['/abc.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['src' => '/abc.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -420,6 +440,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage(): void
     {
@@ -446,7 +469,10 @@ final class RevisionHeadScriptTest extends TestCase
         $headScript
             ->expects(self::once())
             ->method('__call')
-            ->with('prependFile', ['https://www.test.de/abc_42.txt', 'text/javascript', []]);
+            ->with(
+                'prependFile',
+                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $matcher  = self::exactly(4);
@@ -490,6 +516,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage2(): void
     {
@@ -526,6 +555,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage3(): void
     {
@@ -562,6 +594,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependPackage4(): void
     {
@@ -598,6 +633,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependFile(): void
     {
@@ -622,7 +660,10 @@ final class RevisionHeadScriptTest extends TestCase
         $headScript
             ->expects(self::once())
             ->method('__call')
-            ->with('prependFile', ['https://www.test.de/abc_42.txt', 'text/javascript', []]);
+            ->with(
+                'prependFile',
+                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => []],
+            );
 
         $renderer = $this->createMock(PhpRenderer::class);
         $renderer
@@ -644,6 +685,9 @@ final class RevisionHeadScriptTest extends TestCase
     /**
      * @throws InvalidArgumentException
      * @throws BadMethodCallException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testPrependFile2(): void
     {
@@ -666,7 +710,7 @@ final class RevisionHeadScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'prependFile',
-                ['/abc.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['src' => '/abc.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -693,7 +737,12 @@ final class RevisionHeadScriptTest extends TestCase
         self::assertSame($object, $return);
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage(): void
     {
         $package = 'test-package';
@@ -741,7 +790,12 @@ final class RevisionHeadScriptTest extends TestCase
         );
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage2(): void
     {
         $package = 'test-package';
@@ -774,7 +828,12 @@ final class RevisionHeadScriptTest extends TestCase
         self::assertSame([], $return);
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage3(): void
     {
         $package = 'test-package';
@@ -807,7 +866,12 @@ final class RevisionHeadScriptTest extends TestCase
         self::assertSame([], $return);
     }
 
-    /** @throws InvalidArgumentException */
+    /**
+     * @throws InvalidArgumentException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
+     */
     public function testListPackage4(): void
     {
         $package = 'test-package';

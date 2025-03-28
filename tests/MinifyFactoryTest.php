@@ -16,6 +16,8 @@ namespace Mimmi20\LaminasView\Revision;
 use JsonException;
 use Mimmi20\LaminasView\Revision\Config\MinifyConfigInterface;
 use Override;
+use PHPUnit\Event\NoPreviousThrowableException;
+use PHPUnit\Framework\Exception;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -34,6 +36,9 @@ final class MinifyFactoryTest extends TestCase
     /**
      * @throws ContainerExceptionInterface
      * @throws JsonException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvoke(): void
     {
@@ -57,6 +62,9 @@ final class MinifyFactoryTest extends TestCase
     /**
      * @throws ContainerExceptionInterface
      * @throws JsonException
+     * @throws Exception
+     * @throws NoPreviousThrowableException
+     * @throws \PHPUnit\Framework\MockObject\Exception
      */
     public function testInvokeWithRevisionFile(): void
     {

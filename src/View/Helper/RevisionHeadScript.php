@@ -62,9 +62,9 @@ final class RevisionHeadScript extends AbstractHelper
         }
 
         $this->renderer->headScript()->appendFile(
-            $this->getUrl($src, $absolute, $pathPrefix),
-            $type,
-            $attrs,
+            src: $this->getUrl($src, $absolute, $pathPrefix),
+            type: $type,
+            attrs: $attrs,
         );
 
         return $this;
@@ -90,9 +90,9 @@ final class RevisionHeadScript extends AbstractHelper
         }
 
         $this->renderer->headScript()->prependFile(
-            $this->getUrl($src, $absolute, $pathPrefix),
-            $type,
-            $attrs,
+            src: $this->getUrl($src, $absolute, $pathPrefix),
+            type: $type,
+            attrs: $attrs,
         );
 
         return $this;

@@ -23,7 +23,10 @@ use ReflectionProperty;
 
 final class MinifyTest extends TestCase
 {
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testConstructFailsInvalidContent(): void
     {
         $configFile = 'configTest.php';
@@ -41,6 +44,7 @@ final class MinifyTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws JsonException
+     * @throws Exception
      */
     public function testConstructFailsIfFileIsNotReadable(): void
     {
@@ -64,6 +68,7 @@ final class MinifyTest extends TestCase
     /**
      * @throws ReflectionException
      * @throws JsonException
+     * @throws Exception
      */
     public function testConstructOk(): Minify
     {
@@ -103,7 +108,10 @@ final class MinifyTest extends TestCase
         return $minify;
     }
 
-    /** @throws Exception */
+    /**
+     * @throws Exception
+     * @throws Exception
+     */
     #[Depends('testConstructOk')]
     public function testGetPackageFilesWithoutMerging(Minify $minify): void
     {
@@ -114,7 +122,10 @@ final class MinifyTest extends TestCase
         self::assertCount(4, $files['files']);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testGetPackageFilesWithoutMergingWhenDisabled(): void
     {
         $publicDir  = 'public';
@@ -161,7 +172,10 @@ final class MinifyTest extends TestCase
         self::assertCount(4, $files['files']);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testGetPackageFilesWithMerging(): void
     {
         $publicDir  = 'public';
@@ -208,7 +222,10 @@ final class MinifyTest extends TestCase
         self::assertCount(1, $files['files']);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testGetPackageFilesWhenInvalidMissingGroup(): void
     {
         $publicDir  = 'public';
@@ -244,7 +261,10 @@ final class MinifyTest extends TestCase
         self::assertCount(0, $files['files']);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testGetPackageFilesWhenInvalidMissingFilename(): void
     {
         $publicDir  = 'public';
@@ -290,7 +310,10 @@ final class MinifyTest extends TestCase
         self::assertCount(0, $files['files']);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testGetPackageFilesWhenInvalidMissingInput(): void
     {
         $publicDir  = 'public';
@@ -331,7 +354,10 @@ final class MinifyTest extends TestCase
         self::assertCount(0, $files['files']);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testIsItemOkToAddRevisionFailMissingHref(): void
     {
         $minify = new Minify(null, null, null, true);
@@ -339,7 +365,10 @@ final class MinifyTest extends TestCase
         self::assertFalse($minify->isItemOkToAddRevision('', ''));
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testIsItemOkToAddRevisionFailAlreadyMinifiedHref(): void
     {
         $minify = new Minify(null, null, null, true);
@@ -347,7 +376,10 @@ final class MinifyTest extends TestCase
         self::assertFalse($minify->isItemOkToAddRevision('', 'ab__123.txt'));
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testIsItemOkToAddRevisionFailWrongType(): void
     {
         $minify = new Minify(null, null, null, true);
@@ -355,7 +387,10 @@ final class MinifyTest extends TestCase
         self::assertFalse($minify->isItemOkToAddRevision('txt', 'ab.txt'));
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testIsItemOkToAddRevisionOk(): void
     {
         $minify = new Minify(null, null, null, true);
@@ -363,7 +398,10 @@ final class MinifyTest extends TestCase
         self::assertTrue($minify->isItemOkToAddRevision(Minify::FILETYPE_CSS, '/ab.css'));
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testAddRevisionWithoutRevisionFile(): void
     {
         $minify = new Minify(null, null, Minify::DEFAULT_REVISION, true);
@@ -373,7 +411,10 @@ final class MinifyTest extends TestCase
         self::assertSame('/abc__1.txt', $newName);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testAddRevisionWithRevisionFileAndDefaultRevision(): void
     {
         $revisionFile = 'configTest.php';
@@ -389,7 +430,10 @@ final class MinifyTest extends TestCase
         self::assertSame('/abc__' . $revision . '.txt', $newName);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testAddRevisionWithRevisionFileAndDefaultRevision2(): void
     {
         $revisionFile = 'configTest.php';
@@ -405,7 +449,10 @@ final class MinifyTest extends TestCase
         self::assertSame('/abc__' . $revision . '.txt', $newName);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testGetPackageFilesFailsRecursion(): void
     {
         $publicDir  = 'public';
@@ -468,7 +515,10 @@ final class MinifyTest extends TestCase
         self::assertCount(7, $files['files']);
     }
 
-    /** @throws JsonException */
+    /**
+     * @throws JsonException
+     * @throws Exception
+     */
     public function testGetPackageFilesFailsRecursion2(): void
     {
         $publicDir  = 'public';
