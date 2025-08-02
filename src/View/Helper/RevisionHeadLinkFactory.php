@@ -37,7 +37,6 @@ final class RevisionHeadLinkFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      *
      * @phpcsSuppress SlevomatCodingStandard.Functions.UnusedParameter.UnusedParameter
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
      */
     #[Override]
     public function __invoke(
