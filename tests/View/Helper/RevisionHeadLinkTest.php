@@ -58,7 +58,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->with(
                 'appendStylesheet',
-                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+                ['https://www.test.de/abc_42.txt', 'screen', '!IE', []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -247,7 +247,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->with(
                 'appendStylesheet',
-                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+                ['https://www.test.de/abc_42.txt', 'screen', '!IE', []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -327,7 +327,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->with(
                 'appendStylesheet',
-                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+                ['https://www.test.de/abc_42.txt', 'screen', '!IE', []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -375,7 +375,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->with(
                 'appendStylesheet',
-                ['href' => '/test/abc.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+                ['/test/abc.txt', 'screen', '!IE', []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -437,7 +437,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->with(
                 'prependStylesheet',
-                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => false, 'extras' => []],
+                ['https://www.test.de/abc_42.txt', 'screen', false, []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -626,7 +626,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->with(
                 'prependStylesheet',
-                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => false, 'extras' => []],
+                ['https://www.test.de/abc_42.txt', 'screen', false, []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -700,7 +700,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->with(
                 'prependStylesheet',
-                ['href' => 'https://www.test.de/abc_42.txt', 'media' => 'screen', 'conditionalStylesheet' => false, 'extras' => []],
+                ['https://www.test.de/abc_42.txt', 'screen', false, []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -748,7 +748,7 @@ final class RevisionHeadLinkTest extends TestCase
             ->method('__call')
             ->with(
                 'prependStylesheet',
-                ['href' => '/test/abc.txt', 'media' => 'screen', 'conditionalStylesheet' => '!IE', 'extras' => []],
+                ['/test/abc.txt', 'screen', '!IE', []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);

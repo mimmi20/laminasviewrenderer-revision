@@ -58,7 +58,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'appendFile',
-                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['https://www.test.de/abc_42.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -353,7 +353,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'appendFile',
-                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['https://www.test.de/abc_42.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -432,7 +432,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'appendFile',
-                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['https://www.test.de/abc_42.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -486,7 +486,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'appendFile',
-                ['src' => '/abc.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['/abc.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -549,7 +549,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'prependFile',
-                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => []],
+                ['https://www.test.de/abc_42.txt', 'text/javascript', []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -738,7 +738,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'prependFile',
-                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => []],
+                ['https://www.test.de/abc_42.txt', 'text/javascript', []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -812,7 +812,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'prependFile',
-                ['src' => 'https://www.test.de/abc_42.txt', 'type' => 'text/javascript', 'attrs' => []],
+                ['https://www.test.de/abc_42.txt', 'text/javascript', []],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
@@ -860,7 +860,7 @@ final class RevisionInlineScriptTest extends TestCase
             ->method('__call')
             ->with(
                 'prependFile',
-                ['src' => '/abc.txt', 'type' => 'text/javascript', 'attrs' => ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
+                ['/abc.txt', 'text/javascript', ['rel' => 'prev', 'async' => null, 'conditional' => '!IE', 'class' => 'test-class']],
             );
 
         $renderer = $this->createMock(PhpRenderer::class);
