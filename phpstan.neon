@@ -109,7 +109,9 @@ parameters:
 
   ignoreErrors:
     - '~types as the only types passed to this method~'
-#    - '~expects array<string, string>, array<string, string\|null> given~'
+    - '~Access to constant on deprecated class~'
+    - '~has typehint with deprecated class~'
+    - '~extends deprecated class~'
 
     -
       identifier: property.uninitialized

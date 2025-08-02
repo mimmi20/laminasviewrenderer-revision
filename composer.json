@@ -1,6 +1,6 @@
 {
   "name": "mimmi20/laminasviewrenderer-revision",
-  "description": "Revision Viewhelper",
+  "description": "Provides a Viewhelper which adds a revision to Urls",
   "license": "MIT",
   "type": "library",
   "authors": [
