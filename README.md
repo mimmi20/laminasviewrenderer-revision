@@ -13,9 +13,13 @@
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmimmi20%2Flaminasviewrenderer-revision%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/mimmi20/laminasviewrenderer-revision/master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/8b68ff6c8fb0d0bb8078/maintainability)](https://codeclimate.com/github/mimmi20/laminasviewrenderer-revision/maintainability)
 
+## Introduction
+
+This component provides a view helper which adds a revision to rendered urls.
+
 ## Requirements
 
-This library requires PHP 8.1+.
+This library requires PHP 8.3+.
 
 ## Installation
 
