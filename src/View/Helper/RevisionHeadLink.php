@@ -244,10 +244,10 @@ final class RevisionHeadLink extends AbstractHelper
         unset($extras['rel']);
 
         $this->renderer->headLink()->appendStylesheet(
-            href: $this->getUrl($href, $absolute, $pathPrefix),
-            media: $media,
-            conditionalStylesheet: $conditionalStylesheet,
-            extras: $extras,
+            $this->getUrl($href, $absolute, $pathPrefix),
+            $media,
+            $conditionalStylesheet,
+            $extras,
         );
 
         return $this;
@@ -278,10 +278,10 @@ final class RevisionHeadLink extends AbstractHelper
         unset($extras['rel']);
 
         $this->renderer->headLink()->prependStylesheet(
-            href: $this->getUrl($href, $absolute, $pathPrefix),
-            media: $media,
-            conditionalStylesheet: $conditionalStylesheet,
-            extras: $extras,
+            $this->getUrl($href, $absolute, $pathPrefix),
+            $media,
+            $conditionalStylesheet,
+            $extras,
         );
 
         return $this;
